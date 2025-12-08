@@ -178,10 +178,6 @@ def main():
     print(f"  {data_folder}/train_frames.json")
     print(f"  {data_folder}/valid_frames.json")
     print(f"  {data_folder}/test_frames.json")
-    print("\nNext steps:")
-    print("  1. Run: python train_frame_level_7emotions.py")
-    print("  2. Use trained model with: python inference_diarization_7emotions.py")
-
 
 if __name__ == "__main__":
     main()
