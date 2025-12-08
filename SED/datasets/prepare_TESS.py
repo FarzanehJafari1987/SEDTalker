@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Flexible TESS JSON Creator - Handles Different Directory Structures
 """
@@ -13,7 +12,7 @@ print("FLEXIBLE TESS JSON CREATOR")
 print("="*70)
 
 if not os.path.exists(TESS_FOLDER):
-    print(f"❌ TESS folder not found: {TESS_FOLDER}")
+    print(f"TESS folder not found: {TESS_FOLDER}")
     exit(1)
 
 print(f"\nTESS folder: {os.path.abspath(TESS_FOLDER)}")
@@ -22,7 +21,7 @@ print(f"\nTESS folder: {os.path.abspath(TESS_FOLDER)}")
 print("\nExploring TESS directory structure...")
 
 def explore_directory(path, level=0, max_level=2):
-    """Recursively explore directory"""
+    """ Recursively explore directory."""
     items = []
     try:
         for item in os.listdir(path):
@@ -31,14 +30,14 @@ def explore_directory(path, level=0, max_level=2):
             
             if os.path.isdir(item_path):
                 wav_count = sum(1 for f in os.listdir(item_path) if f.endswith('.wav'))
-                print(f"{indent}📁 {item}/ ({wav_count} .wav files)")
+                print(f"{indent} {item} / ({wav_count} .wav files)")
                 items.append((item, item_path, wav_count))
                 
                 if level < max_level:
                     explore_directory(item_path, level + 1, max_level)
             elif item.endswith('.wav'):
                 if level == 0:
-                    print(f"{indent}🎵 {item}")
+                    print(f"{indent} {item}")
     except PermissionError:
         pass
     
@@ -155,7 +154,7 @@ else:
 
 # Strategy 3: Parse from filenames directly if .wav files are in root or subdir
 if total_files == 0:
-    print("\n⚠️  No emotion folders found")
+    print("\nNo emotion folders found")
     print("Trying to parse from filenames...")
     
     # Look for .wav files recursively
@@ -197,7 +196,7 @@ print(f"{'='*70}")
 print(f"Total files processed: {total_files}")
 
 if total_files == 0:
-    print("\n❌ No TESS audio files found!")
+    print("\nNo TESS audio files found!")
     print("\nExpected directory structure (one of these):")
     print("\nOption 1 (Standard):")
     print("  datasets/TESS/")
@@ -261,8 +260,7 @@ if os.path.exists(output_file) and total_files > 0:
     print("SUCCESS! ✓")
     print("="*70)
     print(f"TESS.json is ready!")
-    print("\nNext: Run prepare_enhanced_3emotions.py to combine all datasets")
 else:
-    print("\n❌ Failed to create useful JSON!")
+    print("\nFailed to create useful JSON!")
 
 print("="*70)
