@@ -8,7 +8,7 @@ Dataset info:
 - Speakers: 4 male speakers (DC, JE, JK, KL)
 - Emotions: anger, disgust, fear, happiness, sadness, surprise, neutral (7 emotions)
 - Samples: 480 utterances (120 per speaker)
-- Recording: High quality studio recordings
+- Recording: High-quality studio recordings
 
 IMPORTANT: SAVEE has TWO common directory structures:
   
@@ -47,10 +47,6 @@ Emotion codes:
 Download from:
 - Official: http://kahlan.eps.surrey.ac.uk/savee/
 - Kaggle: https://www.kaggle.com/datasets/ejlok1/surrey-audiovisual-expressed-emotion-savee
-
-Author
-------
-Created 2024 for emotion diarization with neutral support
 """
 
 import os
@@ -78,7 +74,7 @@ SPEAKERS = ["DC", "JE", "JK", "KL"]
 
 def parse_savee_filename(filename):
     """
-    Parse SAVEE filename to extract speaker and emotion
+    Parse the SAVEE filename to extract the speaker and emotion
     
     Handles two formats:
     1. Flat: DC_a01.wav, JE_d02.wav, KL_n01.wav
@@ -169,11 +165,11 @@ def prepare_savee(
     Arguments
     ---------
     data_folder : str
-        Path to the folder where SAVEE dataset is stored.
+        Path to the folder where the SAVEE dataset is stored.
         Handles both folder structure and flat structure.
     save_json : str
         Path where the data specification file will be saved.
-    seed : int
+    seed: int
         Seed for reproducibility
     """
     
@@ -326,7 +322,7 @@ def create_savee_json(data_folder, save_json):
         print(f"  ✓ Processed {total_files} files")
     
     else:
-        print(f"\n❌ ERROR: Cannot detect SAVEE structure!")
+        print(f"\nERROR: Cannot detect SAVEE structure!")
         print(f"\nExpected structures:")
         print(f"\nOption 1 (Speaker folders):")
         print(f"  {data_folder}/")
@@ -357,7 +353,7 @@ def create_savee_json(data_folder, save_json):
         print(f"⚠️  Skipped {skipped_files} files (could not parse)")
     
     if total_files == 0:
-        print("\n❌ No files processed!")
+        print("\nNo files processed!")
         return {}
     
     # Show statistics
@@ -402,14 +398,14 @@ def create_savee_json(data_folder, save_json):
             print(f"     Speaker: {data['speaker']}")
             print(f"     File: {os.path.basename(data['wav'])}")
     else:
-        print(f"\n❌ ERROR: Failed to create JSON file!")
+        print(f"\nERROR: Failed to create JSON file!")
         return {}
     
     return data_json
 
 
 def skip(save_json):
-    """Check if preparation already done"""
+    """ Check if preparation already done."""
     return os.path.isfile(save_json)
 
 
@@ -428,7 +424,7 @@ SAVEE Dataset Information:
   - 7 emotions: anger, disgust, fear, happiness, neutral, sadness, surprise
   - 120 utterances per speaker (15-20 per emotion)
   - British English
-  - High quality studio recordings
+  - High-quality studio recordings
   
 Directory Structure Options:
   
@@ -476,21 +472,21 @@ Examples:
         "--data_folder",
         type=str,
         default="datasets/SAVEE",
-        help="Path to SAVEE dataset folder"
+        help="Path to SAVEE dataset folder."
     )
     
     parser.add_argument(
         "--output",
         type=str,
         default=None,
-        help="Path to output JSON file (default: data_folder/SAVEE.json)"
+        help="Output path JSON file (default: data_folder/SAVEE.json)."
     )
     
     parser.add_argument(
         "--seed",
         type=int,
         default=12,
-        help="Random seed for reproducibility"
+        help="Random seed for reproducibility."
     )
     
     args = parser.parse_args()
@@ -511,15 +507,6 @@ Examples:
         print("SUCCESS! ✓")
         print("="*70)
         print(f"\nSAVEE.json is ready at: {args.output}")
-        print("\nNext steps:")
-        print("  1. Verify JSON: cat", args.output, "| head -50")
-        print("  2. Add to data_preparation_7emotions.py:")
-        print(f"     'datasets/SAVEE/SAVEE.json'")
-        print("  3. Run: python data_preparation_7emotions.py")
-        print("  4. Train: python train_frame_level_7emotions.py")
-        print("\nSAVEE includes NEUTRAL emotion!")
-        print("Expected: ~480 samples total, ~60-70 neutral")
-        print("="*70)
     else:
         print("\n" + "="*70)
         print("FAILED ✗")
