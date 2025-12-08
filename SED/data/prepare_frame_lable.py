@@ -1,5 +1,5 @@
 """
-Prepare Frame-Level Dataset for Emotion Diarization
+Prepare Frame-Level Dataset for Speech Emotion Diarization
 Converts utterance-level labels to frame-level labels
 """
 
@@ -55,7 +55,7 @@ def create_frame_level_dataset(input_json, output_json, sample_rate=16000, frame
                 errors.append(f"{key}: Audio too short ({duration}s)")
                 continue
             
-            # Create frame-level labels (all frames have same emotion for single-emotion utterances)
+            # Create frame-level labels (all frames have the same emotion for single-emotion utterances)
             frame_labels = [emotion] * num_frames
             
             frame_data[key] = {
@@ -95,7 +95,7 @@ def create_frame_level_dataset(input_json, output_json, sample_rate=16000, frame
 
 
 def analyze_frame_distribution(frame_data):
-    """Analyze emotion distribution at frame level"""
+    """ Analyze emotion distribution at the frame level."""
     
     emotion_frame_counts = {}
     
@@ -117,8 +117,8 @@ def analyze_frame_distribution(frame_data):
 
 
 def main():
-    # Configuration - UPDATE THIS PATH!
-    # For 7-emotion system with neutral:
+    # Configuration
+    # For the 7-emotion system with neutral:
     data_folder = "data/processed_emotions_7class"
     
     # Check if folder exists
