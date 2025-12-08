@@ -1,13 +1,8 @@
 """
 Data preparation for Emotion Speech Dataset (ESD).
-
 Dataset link: https://github.com/HLTSingapore/Emotional-Speech-Data
-
 extra dependencies: pydub, webrtcvad
-
-Author
-------
-Yingzhi Wang 2023
+Author: Yingzhi Wang 2023
 """
 
 import numpy as np
@@ -19,7 +14,7 @@ from vad import vad_for_folder
 import logging
 
 logger = logging.getLogger(__name__)
-# we choose here only english utterances
+# We choose here only English utterances
 repos = [
     "0011",
     "0012",
@@ -49,7 +44,7 @@ def prepare_esd(
         Path to the folder where the original ESD dataset is stored.
     save_json : str
         Path where the data specification file will be saved.
-    seed : int
+    seed: int
         Seed for reproducibility
     """
     random.seed(seed)
@@ -110,7 +105,7 @@ def concat_wavs(data_folder, save_json):
     """
     Concatenate audios from the same speaker
     The concatenation is produced with a probability for each modality
-    The amplitude of the sub-sentences are made equal during concatenation
+    The amplitude of the sub-sentences is made equal during concatenation
     """
     data_json = {}
     for repo in repos:
@@ -298,13 +293,13 @@ def concat_wavs(data_folder, save_json):
 
 def skip(save_json):
     """
-    Detects if the data preparation has been already done.
-    If the preparation has been done, we can skip it.
+    Determines whether data preparation has already been done.
+    If the preparation is complete, we can skip it.
     Returns
     -------
     bool
-        if True, the preparation phase can be skipped.
-        if False, it must be done.
+        If True, the preparation phase can be skipped.
+        If False, it must be done.
     """
     if not os.path.isfile(save_json):
         return False
