@@ -1,13 +1,8 @@
 """
 Data preparation for IEMOCAP.
-
 Dataset link: https://sail.usc.edu/iemocap/iemocap_release.htm
-
 extra dependencies: pathlib, pydub, webrtcvad
-
-Author
-------
-Yingzhi Wang 2023
+Author: Yingzhi Wang 2023
 """
 
 import numpy as np
@@ -36,7 +31,7 @@ def prepare_iemocap(
         Path to the folder where the original IEMOCAP dataset is stored.
     save_json : str
         Path where the data specification file will be saved.
-    seed : int
+    seed: int
         Seed for reproducibility
     """
     random.seed(seed)
@@ -103,7 +98,7 @@ def append_path_after_vad(data_folder, id, list):
     Args:
         data_folder (str): the path to IEMOCAP
         id (str): id d'utterance
-        list (list): which list to be put into
+        list (list): which list to put into
 
     Returns:
         list: new list after adding an element
@@ -120,9 +115,9 @@ def append_path_after_vad(data_folder, id, list):
 
 def load_utterInfo(inputFile):
     """
-    Load utterInfo from original IEMOCAP database
+    Load utterInfo from the original IEMOCAP database
     """
-    # this regx allow to create a list with:
+    # this regx allows to create a list with:
     # [START_TIME - END_TIME] TURN_NAME EMOTION [V, A, D]
     # [V, A, D] means [Valence, Arousal, Dominance]
     pattern = re.compile(
@@ -370,13 +365,13 @@ def concat_wavs(data_folder, save_json, emo_wavs, neu_wavs, annotations):
 
 def skip(save_json):
     """
-    Detects if the data preparation has been already done.
-    If the preparation has been done, we can skip it.
+    Determines whether data preparation has already been done.
+    If the preparation is complete, we can skip it.
     Returns
     -------
     bool
-        if True, the preparation phase can be skipped.
-        if False, it must be done.
+        If True, the preparation phase can be skipped.
+        If False, it must be done.
     """
     if not os.path.isfile(save_json):
         return False
