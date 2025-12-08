@@ -10,8 +10,6 @@ CREMA-D (Crowd-sourced Emotional Multimodal Actors Dataset)
 
 Dataset: https://github.com/CheyneyComputerScience/CREMA-D
 Or Kaggle: https://www.kaggle.com/datasets/ejlok1/cremad
-
-Author: 2024
 """
 
 import os
@@ -70,7 +68,7 @@ def parse_cremad_filename(filename):
 
 def prepare_cremad(data_folder, output_json):
     """
-    Prepare CREMA-D dataset
+    Prepare the CREMA-D dataset
     
     Args:
         data_folder: Path to CREMA-D folder (should contain AudioWAV/ or .wav files)
@@ -86,7 +84,7 @@ def prepare_cremad(data_folder, output_json):
     
     # Check if data folder exists
     if not os.path.exists(data_folder):
-        print(f"❌ ERROR: Folder not found: {data_folder}")
+        print(f"ERROR: Folder not found: {data_folder}")
         print("\nPlease download CREMA-D from:")
         print("  https://www.kaggle.com/datasets/ejlok1/cremad")
         print("\nOr:")
@@ -110,7 +108,7 @@ def prepare_cremad(data_folder, output_json):
     wav_files = [f for f in os.listdir(audio_folder) if f.endswith('.wav')]
     
     if not wav_files:
-        print(f"\n❌ ERROR: No .wav files found in {audio_folder}")
+        print(f"\nERROR: No .wav files found in {audio_folder}")
         print("\nExpected structure:")
         print("  datasets/CREMA-D/")
         print("    └── AudioWAV/")
@@ -217,7 +215,7 @@ def prepare_cremad(data_folder, output_json):
             print(f"     Actor: {data['speaker']}")
             print(f"     Intensity: {data['intensity']}")
     else:
-        print("\n❌ ERROR: Failed to create JSON file!")
+        print("\nERROR: Failed to create JSON file!")
         return None
     
     print("\n" + "="*70)
@@ -261,14 +259,14 @@ Examples:
         "--data_folder",
         type=str,
         default="datasets/CREMA-D",
-        help="Path to CREMA-D dataset folder"
+        help="Path to CREMA-D dataset folder."
     )
     
     parser.add_argument(
         "--output",
         type=str,
         default=None,
-        help="Output JSON file path (default: data_folder/CREMA-D.json)"
+        help="Output JSON file path (default: data_folder/CREMA-D.json)."
     )
     
     args = parser.parse_args()
