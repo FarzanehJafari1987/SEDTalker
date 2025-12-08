@@ -1,30 +1,30 @@
-# 📚 Speech Emotion Recognition Datasets - Complete Guide
+# Speech Emotion Recognition Datasets - Complete Guide
 
 **9 English emotion speech datasets for training robust SER systems**
 
 ---
 
-## 🎯 Dataset Overview
+## Dataset Overview
 
 | Dataset | Size | Samples | Language | Access |
 |---------|------|---------|----------|---------|
-| **IEMOCAP** | 12 GB | ~11,000 | 🇺🇸 English | Registration |
-| **RAVDESS** | 1 GB | 1,440 | 🇺🇸 English | Instant |
-| **CREMA-D** | 2 GB | 7,442 | 🇺🇸 English (Multi-ethnic) | Instant |
-| **TESS** | 500 MB | 2,800 | 🇨🇦 English | Instant |
-| **SAVEE** | 200 MB | 480 | 🇬🇧 English | Instant |
-| **ESD** | 3 GB | 10,500 | 🇺🇸/🇨🇳 English+Chinese | Instant |
-| **EmoV-DB** | 2 GB | 6,000 | 🇺🇸 English | Instant |
-| **JL-Corpus** | 5 GB | 10,661 | 🇳🇿 English | Instant |
-| **MELD** | 3 GB | 13,706 | 🇺🇸 English | Instant |
+| **IEMOCAP** | 12 GB | ~11,000 | English | Registration |
+| **RAVDESS** | 1 GB | 1,440 | English | Instant |
+| **CREMA-D** | 2 GB | 7,442 | English (Multi-ethnic) | Instant |
+| **TESS** | 500 MB | 2,800 | English | Instant |
+| **SAVEE** | 200 MB | 480 | English | Instant |
+| **ESD** | 3 GB | 10,500 | English+Chinese | Instant |
+| **EmoV-DB** | 2 GB | 6,000 | English | Instant |
+| **JL-Corpus** | 5 GB | 10,661 | English | Instant |
+| **MELD** | 3 GB | 13,706 | English | Instant |
 
 **Total: ~30 GB, ~64,000 utterances, 7 emotions (angry, disgust, fear, happy, neutral, sad, upset)**
 
 ---
 
-## 📥 Download Links
+## Download Links
 
-### ✅ Instant Access (No Registration)
+### Instant Access (No Registration)
 
 **1. RAVDESS** (Ryerson Audio-Visual Database of Emotional Speech and Song)
 - **Link**: https://zenodo.org/record/1188976/files/Audio_Speech_Actors_01-24.zip
@@ -92,7 +92,7 @@
 
 ---
 
-### 🔐 Registration Required (1-2 Days)
+### Registration Required (1-2 Days)
 
 **9. IEMOCAP** (Interactive Emotional Dyadic Motion Capture)
 - **Link**: https://sail.usc.edu/iemocap/iemocap_release.htm
@@ -105,11 +105,11 @@
   2. Academic email required
   3. Approval: 1-2 business days
   4. Check the spam folder for the download link
-- **Notes**: ⭐ MUST-HAVE dataset, best quality, extensive annotations, ~1,800 neutral samples
+- **Notes**: MUST-HAVE dataset, best quality, extensive annotations, ~1,800 neutral samples
 
 ---
 
-## 💾 Storage & Processing Requirements
+## Storage & Processing Requirements
 
 ### Disk Space
 - **Download**: ~30 GB (compressed)
@@ -119,16 +119,16 @@
 
 ---
 
-## 🎓 Citation Information
+## Citation Information
 
 If you use these datasets in your research, please cite:
 
-**IEMOCAP**: Busso et al. (2008) IEMOCAP: Interactive emotional dyadic motion capture database
-**RAVDESS**: Livingstone & Russo (2018) Ryerson Audio-Visual Database of Emotional Speech and Song  
-**CREMA-D**: Cao et al. (2014) CREMA-D: Crowd-sourced Emotional Multimodal Actors Dataset
-**TESS**: Dupuis & Pichora-Fuller (2010) Toronto Emotional Speech Set
-**SAVEE**: Haq & Jackson (2002) Surrey Audio-Visual Expressed Emotion database
-**ESD**: Zhou et al. (2021) Emotional Speech Dataset
-**EmoV-DB**: Adigwe et al. (2018) Emotional Voices Database
-**JL-Corpus**: James & Lech (2014) JL Corpus of emotional speech
-**MELD**: Poria et al. (2019) MELD: Multimodal EmotionLines Dataset
+- **IEMOCAP**: Busso et al. (2008) IEMOCAP: Interactive emotional dyadic motion capture database
+- **RAVDESS**: Livingstone & Russo (2018) Ryerson Audio-Visual Database of Emotional Speech and Song  
+- **CREMA-D**: Cao et al. (2014) CREMA-D: Crowd-sourced Emotional Multimodal Actors Dataset
+- **TESS**: Dupuis & Pichora-Fuller (2010) Toronto Emotional Speech Set
+- **SAVEE**: Haq & Jackson (2002) Surrey Audio-Visual Expressed Emotion database
+- **ESD**: Zhou et al. (2021) Emotional Speech Dataset
+- **EmoV-DB**: Adigwe et al. (2018) Emotional Voices Database
+- **JL-Corpus**: James & Lech (2014) JL Corpus of emotional speech
+- **MELD**: Poria et al. (2019) MELD: Multimodal EmotionLines Dataset
