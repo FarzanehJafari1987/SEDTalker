@@ -1,10 +1,10 @@
-# 📊 Data Preparation Pipeline for Speech Emotion Recognition
+# Data Preparation Pipeline for Speech Emotion Recognition
 
 **Complete guide for preparing emotion datasets for frame-level temporal diarization**
 
 ---
 
-## 🎯 Overview
+## Overview
 
 This pipeline converts multiple emotion speech datasets into a unified format for training frame-level emotion diarization systems. The process consists of two main steps:
 
@@ -15,7 +15,7 @@ This pipeline converts multiple emotion speech datasets into a unified format fo
 
 ---
 
-## 📁 Files
+## Files
 
 | File | Purpose | Runtime |
 |------|---------|---------|
@@ -24,7 +24,7 @@ This pipeline converts multiple emotion speech datasets into a unified format fo
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -73,7 +73,7 @@ python prepare_frame_lable.py
 **What it does:**
 - Reads utterance-level labels from Step 1
 - Converts to frame-level (20ms per frame, 50 FPS)
-- Propagates emotion label to all frames in utterance
+- Propagates the emotion label to all frames in the utterance
 - Generates ~12 million frame-level annotations
 
 **Output files:**
