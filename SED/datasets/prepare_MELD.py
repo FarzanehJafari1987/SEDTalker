@@ -1,11 +1,11 @@
 """
 Data preparation for MELD (Multimodal EmotionLines Dataset).
 
-MELD is a multimodal emotion dataset with utterances from Friends TV show.
+MELD is a multimodal emotion dataset with utterances from the Friends TV show.
 
 Dataset info:
 - Language: English
-- Speakers: ~304 speakers from Friends TV show
+- Speakers: ~304 speakers from the Friends TV show
 - Emotions: neutral, joy, surprise, anger, sadness, disgust, fear (7 emotions)
 - Samples: ~13,000 utterances across 1,433 dialogues
 - Splits: train (~10K), dev (~1K), test (~2.6K)
@@ -25,10 +25,6 @@ Dataset structure:
     └── test_sent_emo.csv
 
 Download from: https://affective-meca.github.io/MELD.Sharp/
-
-Author
-------
-Adapted from AESDD preparation script 2024
 """
 
 import os
@@ -74,11 +70,11 @@ def prepare_meld(
     Arguments
     ---------
     data_folder : str
-        Path to the folder where MELD dataset is stored.
+        Path to the folder where the MELD dataset is stored.
         Should contain train/, dev/, test/ folders and CSV files.
     save_json : str
         Path where the data specification file will be saved.
-    seed : int
+    seed: int
         Seed for reproducibility
     """
     
@@ -255,7 +251,7 @@ def create_meld_json(data_folder, save_json):
         print(f"⚠ Audio not found for {audio_not_found} utterances")
     
     if total_files == 0:
-        print("\n❌ No files found!")
+        print("\nNo files found!")
         print("\n" + "="*70)
         print("TROUBLESHOOTING")
         print("="*70)
@@ -316,7 +312,7 @@ def create_meld_json(data_folder, save_json):
 
 
 def skip(save_json):
-    """Check if preparation already done"""
+    """ Check if preparation already done."""
     return os.path.isfile(save_json)
 
 
@@ -331,19 +327,19 @@ if __name__ == "__main__":
         "--data_folder",
         type=str,
         default="datasets/MELD",
-        help="Path to MELD dataset folder"
+        help="Path to MELD dataset folder."
     )
     parser.add_argument(
         "--output_json",
         type=str,
         default=None,
-        help="Path to output JSON file (default: data_folder/MELD.json)"
+        help="Output path JSON file (default: data_folder/MELD.json)."
     )
     parser.add_argument(
         "--seed",
         type=int,
         default=12,
-        help="Random seed for reproducibility"
+        help="Random seed for reproducibility."
     )
     
     args = parser.parse_args()
@@ -366,9 +362,3 @@ if __name__ == "__main__":
     print("\nUsage:")
     print("  python prepare_meld.py")
     print("  python prepare_meld.py --data_folder path/to/MELD")
-    print("\nNext steps:")
-    print("  1. Add to prepare_enhanced_3emotions.py:")
-    print(f"     '{args.output_json}'")
-    print("  2. Run: python prepare_enhanced_3emotions.py")
-    print("  3. Train with enhanced dataset!")
-    print(f"{'='*70}")
