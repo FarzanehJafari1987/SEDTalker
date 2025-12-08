@@ -7,7 +7,7 @@
 ## 🎯 Dataset Overview
 
 | Dataset | Size | Samples | Language | Access |
-|---------|------|---------|----------|---------|----------|--------|
+|---------|------|---------|----------|---------|
 | **IEMOCAP** | 12 GB | ~11,000 | 🇺🇸 English | Registration |
 | **RAVDESS** | 1 GB | 1,440 | 🇺🇸 English | Instant |
 | **CREMA-D** | 2 GB | 7,442 | 🇺🇸 English (Multi-ethnic) | Instant |
