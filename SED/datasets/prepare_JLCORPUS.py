@@ -1,14 +1,8 @@
 """
 Data preparation for JL-Corpus.
-
 Dataset link: https://www.kaggle.com/datasets/tli725/jl-corpus?resource=download
-
 extra dependencies: pathlib, pydub, webrtcvad
-
-Author
-------
-Yingzhi Wang 2023
-Modified by ChatGPT 2025 — Fixed path handling and long filename issues
+Author: Yingzhi Wang 2023
 """
 
 import numpy as np
@@ -129,7 +123,7 @@ def get_emotion(wav_path):
 # -------------------------------------------------
 def concat_wavs(data_folder, save_json):
     """
-    Concatenates audios from the same speaker with randomized structure.
+    Concatenates audios from the same speaker with a randomized structure.
     Uses short UUID filenames to prevent path overflow.
     """
     data_json = {}
