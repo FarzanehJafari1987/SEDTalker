@@ -436,27 +436,5 @@ def main():
     print(f"  - Valid: {len(valid_data)} ({VALID_RATIO*100:.0f}%)")
     print(f"  - Test:  {len(test_data)} ({(1-TRAIN_RATIO-VALID_RATIO)*100:.0f}%)")
     
-    print("\n" + "="*70)
-    print("NEXT STEPS")
-    print("="*70)
-    print("1. Update your training script:")
-    print(f'   CONFIG["data_folder"] = "{OUTPUT_DIR}"')
-    print(f'   CONFIG["output_neurons"] = {len(SELECTED_EMOTIONS)}')
-    print()
-    print("2. Update emotion labels:")
-    print(f'   EMOTION_LABELS = {SELECTED_EMOTIONS}')
-    print()
-    print("3. Use class weights:")
-    print(f'   weights = torch.load("{OUTPUT_DIR}/class_weights.pt")')
-    print()
-    print("4. Prepare frame-level data:")
-    print("   python prepare_frame_level_data.py")
-    print("   (Update data_folder in script to use '{OUTPUT_DIR}')")
-    print()
-    print("5. Train your model:")
-    print("   python train_frame_level_7emotions.py")
-    print("="*70)
-
-
 if __name__ == "__main__":
     main()
