@@ -1,13 +1,8 @@
 """
 Data preparation for Emov-DB dataset.
-
 Dataset link: https://openslr.org/115/
-
 extra dependencies: pathlib, pydub, webrtcvad
-
-Author
-------
-Yingzhi Wang 2023
+Author: Yingzhi Wang 2023
 """
 
 import numpy as np
@@ -85,7 +80,7 @@ def prepare_emovdb(
         Path to the folder where the original EmoV-DB dataset is stored.
     save_json : str
         Path where the data specification file will be saved.
-    seed : int
+    seed: int
         Seed for reproducibility
     """
     random.seed(seed)
@@ -95,7 +90,7 @@ def prepare_emovdb(
         logger.info("Preparation completed in previous run, skipping.")
         return
 
-    # wavs of EmoV-DB are saved in double instead of int16
+    # wav ofiles f EmoV-DB are saved in double instead of int16
     logger.info("Converting format from double to int16 ...")
     all_paths = Path(data_folder).rglob("*.wav")
     # paths = copy.deepcopy(all_paths)
@@ -345,13 +340,13 @@ def concat_wavs(data_folder, save_json):
 
 def skip(save_json):
     """
-    Detects if the data preparation has been already done.
-    If the preparation has been done, we can skip it.
+    Determines whether data preparation has already been done.
+    If the preparation is complete, we can skip it.
     Returns
     -------
     bool
-        if True, the preparation phase can be skipped.
-        if False, it must be done.
+        If True, the preparation phase can be skipped.
+        If False, it must be done.
     """
     if not os.path.isfile(save_json):
         return False
