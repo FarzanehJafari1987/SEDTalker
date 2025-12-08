@@ -6,17 +6,17 @@
 
 ## 🎯 Dataset Overview
 
-| Dataset | Size | Samples | Emotions | Neutral | Language | Access |
+| Dataset | Size | Samples | Language | Access |
 |---------|------|---------|----------|---------|----------|--------|
-| **IEMOCAP** | 12 GB | ~11,000 | 10 → 7 | ✅ 1,800 | 🇺🇸 English | Registration |
-| **RAVDESS** | 1 GB | 1,440 | 8 → 7 | ✅ 380 | 🇺🇸 English | Instant |
-| **CREMA-D** | 2 GB | 7,442 | 6 → 6 | ✅ 1,300 | 🇺🇸 English (Multi-ethnic) | Instant |
-| **TESS** | 500 MB | 2,800 | 7 → 7 | ✅ 400 | 🇨🇦 English | Instant |
-| **SAVEE** | 200 MB | 480 | 7 → 7 | ✅ 70 | 🇬🇧 English | Instant |
-| **ESD** | 3 GB | 10,500 | 5 → 5 | ✅ 1,200 | 🇺🇸/🇨🇳 English+Chinese | Instant |
-| **EmoV-DB** | 2 GB | 6,000 | 5 → 4 | ✅ 500 | 🇺🇸 English | Instant |
-| **JL-Corpus** | 5 GB | 10,661 | 3 → 3 | ❌ None | 🇳🇿 English | Instant |
-| **MELD** | 3 GB | 13,706 | 7 → 7 | ✅ 600 | 🇺🇸 English | Instant |
+| **IEMOCAP** | 12 GB | ~11,000 | 🇺🇸 English | Registration |
+| **RAVDESS** | 1 GB | 1,440 | 🇺🇸 English | Instant |
+| **CREMA-D** | 2 GB | 7,442 | 🇺🇸 English (Multi-ethnic) | Instant |
+| **TESS** | 500 MB | 2,800 | 🇨🇦 English | Instant |
+| **SAVEE** | 200 MB | 480 | 🇬🇧 English | Instant |
+| **ESD** | 3 GB | 10,500 | 🇺🇸/🇨🇳 English+Chinese | Instant |
+| **EmoV-DB** | 2 GB | 6,000 | 🇺🇸 English | Instant |
+| **JL-Corpus** | 5 GB | 10,661 | 🇳🇿 English | Instant |
+| **MELD** | 3 GB | 13,706 | 🇺🇸 English | Instant |
 
 **Total: ~30 GB, ~64,000 utterances, 7 emotions (angry, disgust, fear, happy, neutral, sad, upset)**
 
