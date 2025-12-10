@@ -1,10 +1,10 @@
 # Speech-Driven Frame-Level Emotion Recognition
 
-A deep learning system for frame-level emotion classification from speech, achieving **80.01% validation accuracy** across 7 emotion classes using WavLM-based temporal modeling.
+A deep learning system for frame-level emotion classification from speech, achieving **78.92% test accuracy** across 7 emotion classes using WavLM-based temporal modeling.
 
 ---
 
-## 🎯 Project Overview
+## Project Overview
 
 This project implements a state-of-the-art frame-level emotion recognition system that classifies speech into seven distinct emotional categories at 20ms temporal resolution. The model processes speech data frame-by-frame (50 FPS), making it ideal for real-time applications and integration with 3D facial animation pipelines like JambaTalk.
 
@@ -22,56 +22,55 @@ The system recognizes 7 emotions with hierarchical difficulty:
 
 ---
 
-## 📊 Current Performance (Epoch 40/100) 🎉
+## Performance Summary (Test Set Evaluation)
 
 ### Overall Metrics
-- **Validation Accuracy**: **80.01%** ✨ (New Best - Exceeds Target!)
-- **Training Loss**: 0.1096
-- **Validation Loss**: 0.9785
-- **Training Time**: ~2 hours (RTX 4090, BFloat16 mixed precision)
+- **Test Accuracy**: **78.92%** ✨ (Exceeds 77.5% target by +1.4%)
+- **Weighted F1-Score**: **78.85%**
+- **Macro F1-Score**: **77.49%**
+- **Test Frames Evaluated**: 1,849,663 frames (~10.3 hours of speech)
+- **Temporal Jitter**: 0.0013 (excellent stability - ~1 switch per 20 seconds)
+- **Segment Purity**: 45.7% (moderate coherence)
 
-### Per-Class Performance
+### Per-Emotion Performance (Test Set)
 
-| Emotion | Accuracy | Precision | Recall | F1-Score | Support (Frames) | Status |
-|---------|----------|-----------|--------|----------|------------------|--------|
-| **Fear** | **91.01%** | 0.910 | 0.910 | **0.910** | 28,541 | ⭐⭐⭐ Outstanding |
-| **Sad** | **90.91%** | 0.909 | 0.909 | **0.909** | 75,882 | ⭐⭐⭐ Outstanding |
-| **Neutral** | **81.27%** | 0.813 | 0.813 | **0.813** | 172,201 | ✅✅ Excellent |
-| **Happy** | **82.79%** | 0.828 | 0.828 | **0.828** | 620,983 | ✅✅ Excellent |
-| **Disgust** | **79.70%** | 0.797 | 0.797 | **0.797** | 575,799 | ✅ Very Good |
-| **Upset** | **73.98%** | 0.740 | 0.740 | **0.740** | 348,249 | ✅ Good |
-| **Angry** | **58.82%** | 0.588 | 0.588 | **0.588** | 38,054 | ⚠️ Moderate |
-
-**Total Frames Evaluated**: 1,859,709 frames (~10.3 hours of speech)
+| Emotion | Precision | Recall | F1-Score | Support (Frames) | % of Test |
+|---------|-----------|--------|----------|------------------|-----------|
+| **Disgust** | **0.837** | **0.915** | **0.874** | 77,918 | 4.2% |
+| **Neutral** | **0.766** | **0.879** | **0.819** | 24,052 | 1.3% |
+| **Angry** | **0.797** | **0.824** | **0.810** | 594,488 | 32.1% |
+| **Happy** | **0.822** | **0.773** | **0.797** | 595,723 | 32.2% |
+| **Upset** | **0.694** | **0.828** | **0.755** | 169,368 | 9.2% |
+| **Sad** | **0.766** | **0.736** | **0.750** | 351,115 | 19.0% |
+| **Fear** | **0.824** | **0.496** | **0.620** | 36,999 | 2.0% |
 
 ### Performance Highlights
 
-✅ **Major Achievements**:
-- **Fear recognition**: 91.01% (exceptional, +34% vs. expected 57%)
-- **Sad recognition**: 90.91% (outstanding, +15% vs. expected 76%)
-- **Overall accuracy**: 80.01% (+2.5% above target 77.5%)
-- **5 out of 7 emotions**: >75% accuracy
-- **Temporal stability**: Excellent frame-level consistency
+**Major Achievements**:
+- **Disgust**: 87.4% F1 (exceptional, despite only 4.2% of test data)
+- **Neutral**: 81.9% F1 (outstanding, 87.9% recall)
+- **Angry**: 81.0% F1 (excellent, balanced precision/recall)
+- **Happy**: 79.7% F1 (excellent, 82.2% precision)
+- **6 out of 7 emotions**: F1 > 75%
+- **Temporal stability**: Jitter = 0.0013 (outstanding - minimal flickering)
 
-⚠️ **Known Challenges**:
-- **Angry** class: 58.82% (acoustic similarity to upset, high arousal confusion)
-- **Upset** class: 73.98% (semantic overlap with angry/sad, IEMOCAP-only)
-- **Overfitting gap**: Valid loss 9× higher than train loss (managed with early stopping)
+**Known Challenges**:
+- **Fear**: 62.0% F1, only 49.6% recall (model misses half of fear frames)
+  - Root cause: Severe data scarcity (2.0% of training frames)
+  - Confusion: 25% of fear frames misclassified as sad
+  - High precision (82.4%): When the model predicts fear, it's usually correct
+- **Happy↔Angry confusion**: 14% of happy frames misclassified as angry (high arousal overlap)
+- **Segment purity**: 45.7% (moderate - some brief spurious emotion switches)
 
-### Comparison to State-of-the-Art
-
-| Method | Emotions | Resolution | Accuracy | Year |
-|--------|----------|------------|----------|------|
-| **Ours (WavLM)** | **7** | **20ms** | **80.01%** | **2025** |
-| WavLM-EmoDiarization | 8 | 50ms | 73.6% | 2024 |
-| Emotion2Vec | 4 | Frame | 71.4% | 2024 |
-| SpeechBrain SED | 4 | 100ms | 68.2% | 2023 |
-
-**Advantages**: +6.4% accuracy over prior art, finer 20ms resolution, more emotions (7 vs 4-6)
+**Advantages**: 
+- **+5.3%** accuracy over WavLM-EmoDiarization (78.92% vs 73.6%)
+- **2.5× finer** temporal resolution (20ms vs 50ms)
+- **More emotions** than most baselines (7 vs 4-6)
+- **Public datasets** (9 sources, fully reproducible)
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ### Model Design
 
@@ -99,16 +98,17 @@ Frame-Level Predictions [batch, time, 7]
 ```
 
 **Training Configuration**:
-- **Loss**: Weighted Cross-Entropy (class weights: fear 2.15, angry 0.34)
+- **Loss**: Weighted Cross-Entropy (class weights: fear 2.15, happy 0.31)
 - **Optimizer**: AdamW (lr=2e-4, weight_decay=1e-4)
 - **Scheduler**: CosineAnnealingLR (T_max=100)
 - **Batch Size**: 16 (effective 64 with 4× gradient accumulation)
 - **Mixed Precision**: BFloat16 (RTX 4090 optimized)
 - **Regularization**: Dropout 0.3, early stopping at epoch 40
+- **Training Time**: ~30 hours (RTX 4090)
 
 ---
 
-## 📦 Installation
+## Installation
 
 ### System Requirements
 
@@ -118,7 +118,6 @@ Frame-Level Predictions [batch, time, 7]
 - **Storage**: 50GB (datasets + processed files)
 
 ### Dependencies
-
 ```bash
 # Core dependencies
 pip install torch==2.0.1 torchaudio==2.0.2
@@ -129,17 +128,16 @@ pip install speechbrain==0.5.13
 pip install numpy pandas tqdm
 pip install librosa soundfile
 
-# Training utilities
-pip install tensorboard wandb
+# Evaluation & visualization
 pip install scikit-learn matplotlib seaborn
+pip install tensorboard wandb
 ```
 
 ### Quick Setup
-
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/emotion-recognition.git
-cd emotion-recognition
+git clone https://github.com/yourusername/sedtalker.git
+cd sedtalker
 
 # Install requirements
 pip install -r requirements.txt
@@ -157,11 +155,17 @@ python train_emotion_intensity_optimized.py
 
 ---
 
-## 🚀 Usage
+## Usage
 
 ### Training
 
-**Standard Training** (batch_size=4, ~10 hours):
+**Optimized for RTX 4090** (batch_size=16, ~30 hours, recommended):
+```bash
+python train_emotion_intensity_optimized.py
+# Automatically uses BFloat16, batch_size=16, TF32, model compilation
+```
+
+**Standard Training** (batch_size=4):
 ```bash
 python train_frame_level_7emotions.py \
     --data_folder data/processed_emotions_7class \
@@ -171,11 +175,26 @@ python train_frame_level_7emotions.py \
     --lr 0.0001
 ```
 
-**Optimized for RTX 4090** (batch_size=16, ~2 hours, recommended):
+### Evaluation
+
+**Generate Test Predictions**:
 ```bash
-python train_emotion_intensity_optimized.py
-# Automatically uses BFloat16, batch_size=16, TF32, model compilation
+python test_preditions.py \
+    --checkpoint results/emotion_7class/save/CKPT+epoch_40/model.ckpt \
+    --test-json data/processed_emotions_7class/test_frames.json \
+    --output evaluation/test_predictions.json \
+    --smoothing 5
 ```
+
+**Run Comprehensive Evaluation**:
+```bash
+python evaluate_sed_comprehensive.py \
+    --predictions evaluation/test_predictions.json \
+    --ground_truth data/processed_emotions_7class/test_frames.json \
+    --output_dir evaluation_results/
+```
+
+**Output**: Detailed metrics + confusion matrix + per-class visualizations + emotion timeline plots
 
 ### Inference - Frame-Level Diarization
 
@@ -213,7 +232,6 @@ python inference_diarization_7emotions.py \
 ```
 
 ### Python API
-
 ```python
 import torch
 from emotion_model import FrameLevelEmotionModel
@@ -231,7 +249,7 @@ waveform, sr = torchaudio.load('audio.wav')
 if sr != 16000:
     waveform = torchaudio.transforms.Resample(sr, 16000)(waveform)
 
-# Get frame-level predictions
+# Get frame-level predictions (20ms resolution)
 with torch.no_grad():
     logits = model(waveform.unsqueeze(0).cuda())
     probs = torch.softmax(logits, dim=-1)
@@ -241,7 +259,7 @@ with torch.no_grad():
 EMOTIONS = ["angry", "disgust", "fear", "happy", "neutral", "sad", "upset"]
 emotion_timeline = [EMOTIONS[idx] for idx in emotions]
 
-# Print timeline
+# Print timeline (50 FPS)
 for i, emotion in enumerate(emotion_timeline):
     time = i * 0.02  # 20ms per frame
     print(f"{time:.2f}s: {emotion}")
@@ -249,73 +267,49 @@ for i, emotion in enumerate(emotion_timeline):
 
 ---
 
-## 📁 Project Structure
+## Confusion Analysis
 
-```
-emotion-recognition/
-├── train_frame_level_7emotions.py       # Standard training script
-├── train_emotion_intensity_optimized.py # RTX 4090 optimized training
-├── inference_diarization_7emotions.py   # Frame-level inference
-├── emotion_intensity_model.py           # Model architecture
-├── data_preparation_7emotions.py        # Dataset preparation (Step 1)
-├── prepare_frame_lable.py               # Frame-level conversion (Step 2)
-├── configs/
-│   └── config_7emotions.yaml            # Training configuration
-├── data/
-│   ├── processed_emotions_7class/       # Prepared datasets
-│   │   ├── train.json                   # 41,181 utterances
-│   │   ├── train_frames.json            # 8.7M frames
-│   │   ├── valid_frames.json            # 1.9M frames
-│   │   ├── test_frames.json             # 1.9M frames
-│   │   └── class_weights.pt             # Balanced class weights
-│   └── datasets/                        # Raw datasets
-│       ├── IEMOCAP/
-│       ├── RAVDESS/
-│       ├── CREMA-D/
-│       └── ...
-├── results/
-│   └── emotion_7class/
-│       └── save/
-│           └── CKPT+epoch_40/
-│               └── model.ckpt           # Best model checkpoint
-├── docs/
-│   ├── DATASETS_COMPLETE_GUIDE.md       # Dataset download links
-│   ├── DATA_PREPARATION_README.md       # Data preparation guide
-│   └── QUICK_START_OPTIMIZED.md         # RTX 4090 training guide
-└── README.md                            # This file
-```
+### Primary Confusion Patterns
+
+From test set evaluation (1.85M frames):
+
+**High-Arousal Confusion** (14% of errors):
+- **Happy → Angry**: 14% of happy frames misclassified
+- **Angry → Happy**: 8% of angry frames misclassified
+- **Cause**: Both high-arousal, opposite valence (arousal prioritized over valence)
+
+**Fear Recognition Issue** (50% missed):
+- **Fear → Sad**: 25% (low energy similarity)
+- **Fear → Disgust**: 9% (negative valence overlap)
+- **Fear → Happy**: 5% (unexpected, needs investigation)
+- **Cause**: Only 2.0% training frames, insufficient acoustic patterns learned
+
+**Low-Arousal Overlap**:
+- **Sad → Happy**: 11% (subtle valence cues)
+- **Sad → Upset**: 6% (semantic similarity)
+- **Neutral → Sad**: 6% (low arousal baseline confusion)
+
+### Diagonal Dominance
+
+Correct classification rates per emotion:
+- Disgust: 91.5% ⭐⭐⭐
+- Neutral: 87.9% ⭐⭐
+- Angry: 82.4% ⭐⭐
+- Happy: 77.3% ⭐
+- Upset: 82.8% ⭐
+- Sad: 73.6% ⭐
+- Fear: 49.6% ⚠️
 
 ---
 
-## 📈 Training Progress & Insights
-
-### Loss Trajectory
-
-| Epoch | Train Loss | Valid Loss | Valid Acc | Status |
-|-------|------------|------------|-----------|--------|
-| 1 | 1.823 | 1.654 | 42.3% | Initial |
-| 10 | 0.845 | 0.952 | 62.5% | Rapid learning |
-| 20 | 0.456 | 0.923 | 72.8% | Steady improvement |
-| 30 | 0.234 | 0.945 | 76.4% | Fine-tuning |
-| **40** | **0.110** | **0.979** | **80.01%** | **Best ✨** |
-| 50 | 0.089 | 1.123 | 79.2% | Overfitting |
-
-**Key Observations**:
-- Training converged smoothly without instability
-- Best validation at epoch 40 (early stopping recommended)
-- Valid loss 9× higher than train loss indicates some overfitting
-- Model generalizes well despite loss gap (80% accuracy)
-
----
-
-## 🔬 Datasets Used
+## Datasets Used
 
 ### Training Corpus
 
 | Dataset | Samples | Contribution | Emotions | Quality |
 |---------|---------|--------------|----------|---------|
-| **IEMOCAP** | 11,032 | 18.8% | 10→7 | ⭐⭐⭐ Scripted+Improv |
 | **MELD** | 12,070 | 20.5% | 7→7 | ⭐⭐ Conversational |
+| **IEMOCAP** | 11,032 | 18.8% | 10→7 | ⭐⭐⭐ Scripted+Improv |
 | **JL-Corpus** | 10,661 | 18.1% | 3→3 | ⭐⭐ New Zealand English |
 | **ESD** | 10,500 | 17.8% | 5→5 | ⭐⭐⭐ Professional |
 | **CREMA-D** | 7,442 | 12.6% | 6→6 | ⭐⭐⭐ Multi-ethnic |
@@ -324,78 +318,6 @@ emotion-recognition/
 | **RAVDESS** | 1,440 | 1.7% | 8→7 | ⭐⭐⭐ Studio quality |
 | **SAVEE** | 480 | 0.8% | 7→7 | ⭐⭐ British English |
 
-**Total**: 58,834 utterances → 46,764 valid samples → 12.45M frames
+**Total**: 58,834 utterances → 46,764 valid samples → 12.45M frames (69.2 hours)
 
----
-
-## 🎯 Applications
-
-### 1. **3D Facial Animation** (Primary Use Case)
-- **JambaTalk Integration**: Emotion-driven talking head generation
-- Real-time 20ms emotion updates for FLAME mesh deformation
-- Smooth transitions between emotional expressions
-- Intensity-aware blend shape control
-
-### 2. **Virtual Assistants & Avatars**
-- Emotion-aware conversational AI
-- Empathetic response generation
-- User emotion state monitoring
-
-### 3. **Mental Health & Wellbeing**
-- Depression detection from speech patterns
-- Emotional state tracking over time
-
-### 4. **Customer Service Analytics**
-- Real-time sentiment analysis in call centers
-- Customer satisfaction prediction
-
----
-
-## 🔮 Future Work
-
-### Short-Term
-- [ ] Fix angry recognition (target: 70%)
-- [ ] Reduce overfitting (increase dropout)
-- [ ] Export to ONNX
-- [ ] Integrate with JambaTalk
-
-### Long-Term
-- [ ] Multi-task learning (arousal/valence)
-- [ ] Multilingual support
-- [ ] Few-shot learning
-- [ ] SIGGRAPH 2026 submission
-
----
-
-## 📚 Citation
-
-```bibtex
-@article{emotion_recognition_2025,
-  title={Frame-Level Speech Emotion Recognition for Real-Time 3D Facial Animation},
-  author={Fari and Basu, Anup},
-  journal={University of Alberta},
-  year={2025},
-  note={Achieving 80.01\% accuracy on 7-emotion classification at 20ms resolution}
-}
-```
-
----
-
-## 🙏 Acknowledgments
-
-- **Supervisor**: Professor Anup Basu, University of Alberta
-- **Funding**: Amii (Alberta Machine Intelligence Institute)
-- **Datasets**: IEMOCAP, RAVDESS, CREMA-D, TESS, ESD, EmoV-DB, JL-Corpus, MELD, SAVEE
-- **Frameworks**: PyTorch, SpeechBrain, WavLM
-
----
-
-## 📞 Contact
-
-**Fari**  
-PhD Candidate, Computing Science  
-University of Alberta, Canada
-
-**Status**: ✅ Production Ready | 🎓 Academic Research | 🚀 SIGGRAPH 2026
-
-**Last Updated**: December 2024 | **Version**: 1.0 (Epoch 40 Checkpoint)
+**Test Set**: 7,007 utterances → 1.85M frames (10.3 hours)
