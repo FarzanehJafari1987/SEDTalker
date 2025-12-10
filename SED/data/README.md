@@ -38,7 +38,7 @@ ls datasets/RAVDESS/
 # ... (see DATASETS_COMPLETE_GUIDE.md for download links)
 ```
 
-### Step 1: Prepare Datasets (5 minutes)
+### Step 1: Prepare Datasets
 
 ```bash
 python data_preparation_7emotions.py
@@ -64,7 +64,7 @@ data/processed_emotions_7class/
 └── dataset_info.json       # Dataset statistics
 ```
 
-### Step 2: Create Frame-Level Labels (15 minutes)
+### Step 2: Create Frame-Level Labels
 
 ```bash
 python prepare_frame_lable.py
@@ -89,7 +89,7 @@ data/processed_emotions_7class/
 
 ---
 
-## 📋 Detailed Usage
+## Detailed Usage
 
 ### Step 1: Dataset Preparation
 
@@ -309,23 +309,9 @@ Frame-Level Distribution:
 ==================================================
   Total:       8,740,095 frames
 
-======================================================================
-✓ Frame-level data preparation complete!
-======================================================================
-
-Output files:
-  data/processed_emotions_7class/train_frames.json
-  data/processed_emotions_7class/valid_frames.json
-  data/processed_emotions_7class/test_frames.json
-
-Next steps:
-  1. Run: python train_frame_level_7emotions.py
-  2. Use trained model with: python inference_diarization_7emotions.py
-```
-
 ---
 
-## 📊 Output Format
+## Output Format
 
 ### Utterance-Level JSON (Step 1)
 
@@ -404,7 +390,7 @@ Frame 171: 3.42s - 3.44s → "happy"
 
 ---
 
-## 📈 Statistics & Metrics
+## Statistics & Metrics
 
 ### Dataset Scale
 
@@ -435,123 +421,6 @@ Frame 171: 3.42s - 3.44s → "happy"
 
 ---
 
-## ⚠️ Troubleshooting
-
-### Common Issues
-
-#### 1. Dataset Not Found
-
-```
-ERROR: Data folder not found!
-Looking for: data/processed_emotions_7class
-```
-
-**Solution:**
-```bash
-# Run Step 1 first
-python data_preparation_7emotions.py
-
-# Or update path in prepare_frame_lable.py:
-data_folder = "your/custom/path"
-```
-
-#### 2. Missing Dataset JSON
-
-```
-⚠️  Not found: datasets/IEMOCAP/IEMOCAP.json
-```
-
-**Solution:**
-1. Download missing dataset (see `DATASETS_COMPLETE_GUIDE.md`)
-2. Run dataset preparation script (e.g., `prepare_IEMOCAP.py`)
-3. Or comment out in `DATASET_JSON_FILES` list
-
-#### 3. PyTorch Not Found
-
-```
-⚠️  PyTorch not found, skipping class weights calculation
-```
-
-**Solution:**
-```bash
-pip install torch torchaudio
-```
-
-#### 4. High Error Rate (>30%)
-
-Check error logs:
-```bash
-cat data/processed_emotions_7class/train_frames_errors.txt
-```
-
-Common causes:
-- Corrupted audio files → Re-download dataset
-- Wrong audio paths → Check dataset preparation scripts
-- Unsupported format → Convert to 16kHz WAV
-
-#### 5. Memory Issues
-
-```
-MemoryError: Cannot allocate memory
-```
-
-**Solution:**
-- Process datasets one at a time
-- Reduce batch size in subsequent training
-- Close other applications
-
----
-
-## 🎯 Next Steps After Preparation
-
-### 1. Verify Output
-
-```bash
-# Check files exist
-ls -lh data/processed_emotions_7class/*.json
-
-# Verify frame counts
-python -c "
-import json
-with open('data/processed_emotions_7class/train_frames.json') as f:
-    data = json.load(f)
-print(f'Train samples: {len(data):,}')
-print(f'Total frames: {sum(item[\"num_frames\"] for item in data.values()):,}')
-"
-```
-
-### 2. Train Model
-
-```bash
-# Standard training (batch_size=4, ~10 hours)
-python train_frame_level_7emotions.py
-
-# Optimized for RTX 4090 (batch_size=16, ~2 hours)
-python train_emotion_intensity_optimized.py
-```
-
-### 3. Run Inference
-
-```bash
-# Frame-level emotion diarization
-python inference_diarization_7emotions.py \
-    --checkpoint results/emotion_diarization_7class/save/CKPT+epoch_50/model.ckpt \
-    --audio test.wav \
-    --smoothing 5
-```
-
----
-
-## 📚 Additional Resources
-
-### Related Files
-
-- `DATASETS_COMPLETE_GUIDE.md` - Download links for all 9 datasets
-- `train_frame_level_7emotions.py` - Training script for frame-level model
-- `train_emotion_intensity_optimized.py` - Optimized training for RTX 4090
-- `inference_diarization_7emotions.py` - Inference script for diarization
-- `emotion_intensity_model.py` - Multi-task model with intensity detection
-
 ### Dataset Preparation Scripts
 
 Each dataset has its own preparation script:
@@ -571,7 +440,7 @@ Run these **before** Step 1 to create individual `{DATASET}.json` files.
 
 ---
 
-## 📊 Expected Results
+## Expected Results
 
 After completing both steps, you should have:
 
@@ -588,12 +457,12 @@ data/processed_emotions_7class/
 ├── class_weights.json      ✅ JSON weights
 └── dataset_info.json       ✅ Statistics
 
-Total: 58,834 utterances → 12.45M frames → Ready for training! 🎉
+Total: 58,834 utterances → 12.45M frames → Ready for training!
 ```
 
 ---
 
-## 🎓 Citation
+## Citation
 
 If you use this data preparation pipeline, please cite the original datasets:
 
@@ -607,27 +476,4 @@ If you use this data preparation pipeline, please cite the original datasets:
 - **JL-Corpus**: James & Lech (2014)
 - **MELD**: Poria et al. (2019)
 
-See `DATASETS_COMPLETE_GUIDE.md` for full citations.
-
----
-
-## 📞 Support
-
-**Issues?**
-1. Check error logs in `data/processed_emotions_7class/*_errors.txt`
-2. Verify all datasets are downloaded
-3. Ensure PyTorch and torchaudio are installed
-4. Check file paths in configuration
-
-**Questions?**
-- Review this README
-- Check `DATASETS_COMPLETE_GUIDE.md`
-- Open an issue on GitHub
-
----
-
-**Ready to prepare your data? Start with Step 1! 🚀**
-
-```bash
-python data_preparation_7emotions.py
-```
+See the datasts folder `README.md` for full citations.
