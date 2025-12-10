@@ -16,11 +16,15 @@ diarization**.
 
 ### Prerequisites
 
-    pip install torch torchaudio transformers scikit-learn matplotlib seaborn tqdm
+```
+pip install torch torchaudio transformers scikit-learn matplotlib seaborn tqdm
+```
 
 ## Step 1: Generate Predictions
 
+```
 python test_preditions.py --checkpoint results/emotion_7class/save/CKPT+epoch_40/model.ckpt --test-json data/processed_emotions_7class/test_frames.json --output evaluation/test_predictions.json --smoothing 5
+```
 
 ### Output
 
@@ -35,7 +39,9 @@ python test_preditions.py --checkpoint results/emotion_7class/save/CKPT+epoch_40
 
 ## Step 2: Run Comprehensive Evaluation
 
+```
 python evaluate_sed_comprehensive.py --predictions evaluation/test_predictions.json --ground_truth data/processed_emotions_7class/test_frames.json --output_dir evaluation_results/
+```
 
 ### Output Files
 
