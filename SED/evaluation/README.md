@@ -1,10 +1,10 @@
-# 📊 SEDTalker Evaluation Guide
+# Evaluation Guide
 
 Quick guide to evaluate trained emotion diarization models
 
-## 🎯 Overview
+## Overview
 
-A comprehensive evaluation pipeline for **frame-level speech emotion
+A comprehensive evaluation pipeline for **frame-level speech emotion 
 diarization**.
 
 **Includes:** - Metrics: Accuracy, Precision, Recall, F1-score per
@@ -12,7 +12,7 @@ emotion - Visualizations: Confusion matrix, per-class metrics, emotion
 timeline - Input: Model checkpoint + test dataset - Output: Detailed
 report + figures
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -46,32 +46,24 @@ report + figures
     ├── per_class_metrics.png
     └── emotion_timeline_sample.png
 
-## 📊 Expected Results
+## Expected Results
 
 Overall accuracy, F1 scores, jitter, and more.
 
-## 🔍 Understanding Outputs
+## Understanding Outputs
 
 -   Confusion matrix analysis
 -   Per-class metric interpretation
 -   Emotion timeline alignment
 
-## 📈 Metrics
+## Metrics
 
 Formulas for accuracy, F1, weighted F1, jitter, and purity.
 
-## 🎯 Customization
+## Customization
 
-Adjust smoothing, evaluate subsets, generate ROC/PR curves.
+Adjust smoothing, evaluate subsets, and generate ROC/PR curves.
 
-## 🐛 Troubleshooting
-
-Common issues: OOM, mismatched IDs, low recall.
-
-## 📚 File Formats
+## File Formats
 
 JSON + text report structure.
-
-## 🎯 Next Steps
-
-Deployment, research paper usage, and improvements.
