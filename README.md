@@ -1,10 +1,10 @@
-# 🎭 SEDTalker: Speech-Driven 3D Facial Animation with Emotion Conditioning
+# SEDTalker: Speech-Driven 3D Facial Animation with Emotion Conditioning
 
 <p align="center">
   <img src="SEDTalker.png" alt="SEDTalker Overview" width="100%">
 </p>
 
-> **Visual Overview**: SEDTalker processes audio through emotion diarization, detecting emotions (sad 😢, neutral 😐, happy 😊) with varying intensities (low ▁▁▁▁, medium ▄▄▄▄, high ████), then generates smooth, emotion-conditioned 3D facial animations.
+> **Visual Overview**: SEDTalker processes audio through emotion diarization, detecting emotions with varying intensities, then generates smooth, emotion-conditioned 3D facial animations.
 
 ---
 
@@ -107,7 +107,7 @@ Download the pre-trained JambaTalk and SED models:
 **Extract and organize:**
 
 ```bash
-# Extract the downloaded models
+# Extract the downloaded models,
 unzip models.zip
 
 # Expected structure:
@@ -128,7 +128,7 @@ unzip models.zip
 
 ```bash
 # Quick test with demo audio
-python demo_better_smooth.py --wav_path SED/wav/mixed_test.wav
+python demo.py --wav_path SED/wav/mixed_test.wav
 
 # Should see:
 # ✅ Audio: SED/wav/mixed_test.wav
@@ -140,16 +140,16 @@ python demo_better_smooth.py --wav_path SED/wav/mixed_test.wav
 
 ```bash
 # Run with default settings
-python demo_better_smooth.py --wav_path your_audio.wav
+python demo.py --wav_path your_audio.wav
 
 # With chunk reduction (recommended)
-python demo_better_smooth.py \
+python demo.py \
   --wav_path your_audio.wav \
   --chunk_duration 4.0 \
   --min_segment_duration 2.0
 
 # Adjust smoothing
-python demo_better_smooth.py \
+python demo.py \
   --wav_path your_audio.wav \
   --smooth_sigma 1.5
 ```
@@ -215,66 +215,6 @@ python demo_better_smooth.py \
 ```
 
 ---
-
-## 🛠️ Troubleshooting
-
-### Common Issues
-
-**❌ Model not found error:**
-```
-❌ Model not found: EmoVOCA/save_512_12_10_22_42/50_model.pth
-```
-**Solution:** Download models from [Google Drive](https://drive.google.com/file/d/1tj3CLril0hZy9R_KQPV68NnuIGHo-EF9/view?usp=drive_link) and extract to the correct location.
-
-**❌ CUDA out of memory:**
-```
-RuntimeError: CUDA out of memory
-```
-**Solution:** Use CPU instead:
-```bash
-python demo_better_smooth.py --wav_path audio.wav --device cpu
-```
-
-**❌ FFmpeg not found:**
-```
-⚠️ Video without audio: temp.avi
-```
-**Solution:** Install FFmpeg:
-```bash
-# Ubuntu/Debian
-sudo apt-get install ffmpeg
-
-# macOS
-brew install ffmpeg
-
-# Windows
-# Download from https://ffmpeg.org/download.html
-```
-
-**❌ Import error for psbody.mesh:**
-```
-Using trimesh (psbody.mesh not available)
-```
-**Solution:** This is normal! The code automatically falls back to trimesh. No action needed.
-
-**❌ PyRender display issues:**
-```
-ERROR: Could not initialize EGL
-```
-**Solution:** Set the platform:
-```bash
-export PYOPENGL_PLATFORM=egl
-python demo_better_smooth.py --wav_path audio.wav
-```
-
-### Need Help?
-
-- 📖 Check the [JambaTalk repository](https://github.com/FarzanehJafari1987/JambaTalk) for environment setup
-- 💬 Open an issue on GitHub
-- 📧 Contact the author
-
----
-
 ## 📖 Detailed Usage
 
 ### Chunk Reduction
@@ -283,13 +223,13 @@ Reduce the number of emotion segments for smoother, more stable animations:
 
 ```bash
 # Moderate reduction (recommended)
-python demo_better_smooth.py \
+python demo.py \
   --wav_path audio.wav \
   --chunk_duration 4.0 \
   --min_segment_duration 2.0
 
 # Aggressive reduction
-python demo_better_smooth.py \
+python demo.py \
   --wav_path audio.wav \
   --chunk_duration 6.0 \
   --min_segment_duration 3.0 \
@@ -315,16 +255,16 @@ python demo_better_smooth.py \
 
 ```bash
 # Light smoothing (subtle)
-python demo_better_smooth.py --wav_path audio.wav --smooth_sigma 0.5
+python demo.py --wav_path audio.wav --smooth_sigma 0.5
 
 # Medium smoothing (default, recommended)
-python demo_better_smooth.py --wav_path audio.wav --smooth_sigma 1.0
+python demo.py --wav_path audio.wav --smooth_sigma 1.0
 
 # Heavy smoothing (very smooth)
-python demo_better_smooth.py --wav_path audio.wav --smooth_sigma 2.0
+python demo.py --wav_path audio.wav --smooth_sigma 2.0
 
 # Savitzky-Golay filter (preserves peaks better)
-python demo_better_smooth.py --wav_path audio.wav --smooth_method savgol
+python demo.py --wav_path audio.wav --smooth_method savgol
 
 # Disable smoothing (compare)
 python demo_better_smooth.py --wav_path audio.wav --no_smooth
