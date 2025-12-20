@@ -469,7 +469,9 @@ def render_video(audio_path, vertices, faces, output_dir):
     print("="*70)
     
     temp_avi = os.path.join(output_dir, "temp.avi")
-    output_mp4 = os.path.join(output_dir, "video.mp4")
+
+    audio_basename = Path(audio_path).stem
+    output_mp4 = os.path.join(output_dir, f"{audio_basename}_video.mp4")
     
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     writer = cv2.VideoWriter(temp_avi, fourcc, 30, (800, 800))
