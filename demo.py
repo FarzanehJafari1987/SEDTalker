@@ -44,7 +44,7 @@ os.environ.setdefault('PYOPENGL_PLATFORM', 'egl')
 # ============================================================================
 
 DEFAULT_CONFIG = {
-    "wav_path": "SED/wav/test.wav",
+    "wav_path": "SED/wav/mixed_test.wav",
     "dataset": "EmoVOCA",
     "model_name": "save_512_12_10_22_42/50_model",
     "template_path": "templates.pkl",
@@ -673,29 +673,126 @@ def main():
             emb = model._condition_features(dummy, emo_id, int_id)
             emotion_embeddings[(emo, intensity)] = emb.squeeze(1)
     
-    # Apply emotions sharply (no blending)
-    intensity_names = {1: "LOW", 2: "MID", 3: "HIGH"}
-    print("\nApplying emotions (sharp transitions - smoothing will be on vertices):")
+    # Apply emotions sharply (no blending) - WITH DETAILED TIMELINE
+    intensity_names = {1: "low", 2: "medium", 3: "high"}
+    intensity_bars = {1: "▁▁▁▁", 2: "▄▄▄▄", 3: "████"}
+    
+    print("\n" + "="*70)
+    print("🎭 EMOTION-INTENSITY TIMELINE")
+    print("="*70)
     
     for i, seg in enumerate(segments, 1):
-        if seg["emotion"] == "neutral":
-            print(f"  Segment {i}: NEUTRAL (no conditioning)")
-            continue
+        emoji = EMOTION_EMOJIS.get(seg["emotion"], "❓")
+        seg_duration = seg['end'] - seg['start']
+        intensity_bar = intensity_bars.get(seg['intensity'], "▁▁▁▁")
+        intensity_name = intensity_names.get(seg['intensity'], "low")
         
-        start_frame = int(seg["start"] * seq_len / duration)
-        end_frame = int(seg["end"] * seq_len / duration)
-        emb = emotion_embeddings[(seg["emotion"], seg["intensity"])]
-        cond_vec[:, start_frame:end_frame, :] = emb
+        # Get first char of emotion for compact display
+        emo_char = seg['emotion'][0] if seg['emotion'] else 'n'
         
-        print(f"  Segment {i}: frames {start_frame:4d}-{end_frame:4d} | "
-              f"{seg['emotion'].upper():8s} {intensity_names[seg['intensity']]:4s}")
+        if seg["emotion"] != "neutral":
+            start_frame = int(seg["start"] * seq_len / duration)
+            end_frame = int(seg["end"] * seq_len / duration)
+            emb = emotion_embeddings[(seg["emotion"], seg["intensity"])]
+            cond_vec[:, start_frame:end_frame, :] = emb
+        
+        print(f"  {i:2d}. {seg['start']:7.3f}s - {seg['end']:7.3f}s ({seg_duration:6.3f}s)  "
+              f"{emoji} {emo_char:8s}  {intensity_bar} {intensity_name:8s}")
+    
+    print("="*70)
+    
+    # Emotion distribution
+    print("\n📊 EMOTION DISTRIBUTION:")
+    print("-"*70)
+    emotion_stats = {}
+    for seg in segments:
+        emo = seg['emotion']
+        dur = seg['end'] - seg['start']
+        if emo not in emotion_stats:
+            emotion_stats[emo] = {'duration': 0, 'count': 0, 'intensities': []}
+        emotion_stats[emo]['duration'] += dur
+        emotion_stats[emo]['count'] += 1
+        if seg['emotion'] != 'neutral':
+            emotion_stats[emo]['intensities'].append(seg['intensity'])
+    
+    total_duration = sum([s['duration'] for s in emotion_stats.values()])
+    
+    for emo in sorted(emotion_stats.keys()):
+        emoji = EMOTION_EMOJIS.get(emo, "❓")
+        emo_char = emo[0] if emo else 'n'
+        dur = emotion_stats[emo]['duration']
+        pct = (dur / total_duration * 100) if total_duration > 0 else 0
+        count = emotion_stats[emo]['count']
+        
+        bar_len = int(pct / 2)
+        bar = "█" * bar_len
+        
+        print(f"  {emoji} {emo_char:8s}: {dur:6.2f}s ({pct:5.1f}%)  {bar}")
+        
+        if emotion_stats[emo]['intensities']:
+            avg_int = sum(emotion_stats[emo]['intensities']) / len(emotion_stats[emo]['intensities'])
+            print(f"           Avg intensity: {avg_int:.3f}  ({count} segments)")
+        else:
+            print(f"           ({count} segments)")
+    
+    print("-"*70)
+    
+    # Intensity distribution  
+    print("\n🔥 INTENSITY DISTRIBUTION:")
+    print("-"*70)
+    intensity_durations = {1: 0, 2: 0, 3: 0}
+    for seg in segments:
+        if seg['emotion'] != 'neutral':
+            dur = seg['end'] - seg['start']
+            intensity_durations[seg['intensity']] += dur
+    
+    total_int_dur = sum(intensity_durations.values())
+    int_display = {3: "high  ", 2: "medium", 1: "low   "}
+    
+    for intensity in [3, 2, 1]:
+        dur = intensity_durations[intensity]
+        pct = (dur / total_int_dur * 100) if total_int_dur > 0 else 0
+        bar_len = int(pct / 2)
+        bar = "█" * bar_len
+        print(f"  {int_display[intensity]}: {dur:6.2f}s ({pct:5.1f}%)  {bar}")
+    
+    print("-"*70)
+    
+    # Emotion-Intensity matrix
+    print("\n🎭 EMOTION-INTENSITY MATRIX:")
+    print("-"*70)
+    
+    matrix = {}
+    for seg in segments:
+        if seg['emotion'] != 'neutral':
+            key = (seg['emotion'], seg['intensity'])
+            dur = seg['end'] - seg['start']
+            if key not in matrix:
+                matrix[key] = {'duration': 0, 'count': 0}
+            matrix[key]['duration'] += dur
+            matrix[key]['count'] += 1
+    
+    # Sort by duration
+    sorted_matrix = sorted(matrix.items(), key=lambda x: x[1]['duration'], reverse=True)
+    
+    for (emo, intensity), stats in sorted_matrix:
+        emoji = EMOTION_EMOJIS.get(emo, "❓")
+        emo_char = emo[0] if emo else 'n'
+        dur = stats['duration']
+        pct = (dur / total_duration * 100) if total_duration > 0 else 0
+        count = stats['count']
+        int_name = intensity_names[intensity]
+        
+        print(f"  {emoji} {emo_char:8s} + {int_name:8s}: {dur:5.2f}s ({pct:5.1f}%)  ({count} segments)")
+    
+    print("-"*70)
     
     vertice_input = vertice_input + cond_vec
-    print("✓ Emotion conditioning applied (sharp)")
+    print("\n✅ Emotion conditioning applied (sharp)")
     
     # Generate
     print("\n" + "="*70)
-    print("STEP 6: GENERATE ANIMATION")
+    print("🎨 STEP 6: GENERATE ANIMATION")
     print("="*70)
     
     with torch.no_grad():
