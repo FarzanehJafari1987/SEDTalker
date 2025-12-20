@@ -514,13 +514,3 @@ If you use SEDTalker in your research, please cite:
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
-
-<p align="center">
-  Made with ❤️ and lots of ☕
-</p>
-
-<p align="center">
-  <sub>Built with PyTorch, Transformers, and the power of emotions 🎭</sub>
-</p>
