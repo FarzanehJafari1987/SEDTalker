@@ -1,6 +1,5 @@
 """
 Complete Frame-Level Training Script for Emotion Diarization
-ENHANCED VERSION - Better model architecture to prevent file-level overfitting
 Compatible with SpeechBrain 0.5.13
 """
 
@@ -33,8 +32,8 @@ except FileNotFoundError:
 CONFIG = {
     "seed": 1234,
     "data_folder": "data/processed_emotions_7class",
-    "output_folder": "results/emotion_diarization_7class_enhanced",  # New folder for enhanced model
-    "save_folder": "results/emotion_diarization_7class_enhanced/save",
+    "output_folder": "results/emotion_diarization_7class",
+    "save_folder": "results/emotion_diarization_7class/save",
     "batch_size": 4,
     "grad_accumulation_factor": 8,
     "number_of_epochs": 100,
@@ -43,77 +42,53 @@ CONFIG = {
     "sample_rate": 16000,
     "wav2vec2_hub": "microsoft/wavlm-base-plus",
     "freeze_feature_extractor": True,
-    "freeze_encoder_layers": 8,  # ENHANCED: More aggressive freezing
+    "freeze_encoder_layers": 6,
     "dropout": 0.3,
     "frame_shift": 0.02,  # 20ms per frame (WavLM default)
 }
 
 # ============================================================================
-# ENHANCED Frame-Level Model (prevents file-level overfitting)
+# Frame-Level Model
 # ============================================================================
 
 class FrameLevelEmotionModel(nn.Module):
     def __init__(self, config):
         super().__init__()
         
-        print(f"Loading Enhanced Model: {config['wav2vec2_hub']}")
+        print(f"Loading: {config['wav2vec2_hub']}")
         self.wav2vec2 = AutoModel.from_pretrained(
             config['wav2vec2_hub'],
             cache_dir="pretrained_models/"
         )
         
-        # ENHANCED: More aggressive freezing to prevent file-level learning
-        
-        # 1. Freeze feature extractor completely
-        if hasattr(self.wav2vec2, 'feature_extractor'):
-            for param in self.wav2vec2.feature_extractor.parameters():
-                param.requires_grad = False
-            print("  ✓ Froze feature extractor")
-        
-        # 2. Freeze more encoder layers (keep only last 4 trainable)
-        if hasattr(self.wav2vec2, 'encoder') and hasattr(self.wav2vec2.encoder, 'layers'):
-            num_layers = len(self.wav2vec2.encoder.layers)
-            freeze_layers = max(config.get('freeze_encoder_layers', 6), num_layers - 4)
-            
-            for i in range(min(freeze_layers, num_layers)):
-                for param in self.wav2vec2.encoder.layers[i].parameters():
+        # Freeze feature extractor
+        if config['freeze_feature_extractor']:
+            if hasattr(self.wav2vec2, 'feature_extractor'):
+                for param in self.wav2vec2.feature_extractor.parameters():
                     param.requires_grad = False
-            
-            print(f"  ✓ Froze {freeze_layers}/{num_layers} encoder layers (keeping last {num_layers - freeze_layers} trainable)")
+        
+        # Freeze encoder layers
+        if config['freeze_encoder_layers'] > 0:
+            try:
+                for i in range(config['freeze_encoder_layers']):
+                    for param in self.wav2vec2.encoder.layers[i].parameters():
+                        param.requires_grad = False
+                print(f"Froze {config['freeze_encoder_layers']} encoder layers")
+            except:
+                pass
         
         self.feature_dim = self.wav2vec2.config.hidden_size
         
-        # ENHANCED: Add layer normalization for stability
-        self.feature_norm = nn.LayerNorm(self.feature_dim)
-        
-        # ENHANCED: Deeper classifier with better regularization
+        # Frame-level classifier (NO POOLING!)
         self.classifier = nn.Sequential(
-            # First block
-            nn.Linear(self.feature_dim, 512),
-            nn.LayerNorm(512),
-            nn.GELU(),  # GELU instead of ReLU for better gradients
+            nn.Linear(self.feature_dim, 256),
+            nn.ReLU(),
             nn.Dropout(config['dropout']),
-            
-            # Second block
-            nn.Linear(512, 256),
-            nn.LayerNorm(256),
-            nn.GELU(),
-            nn.Dropout(config['dropout']),
-            
-            # Third block
             nn.Linear(256, 128),
-            nn.LayerNorm(128),
-            nn.GELU(),
+            nn.ReLU(),
             nn.Dropout(config['dropout']),
-            
-            # Output
             nn.Linear(128, config['output_neurons'])
         )
-        
-        # Print trainable parameters
-        total_params = sum(p.numel() for p in self.parameters())
-        trainable_params = sum(p.numel() for p in self.parameters() if p.requires_grad)
-        print(f"  Model: {trainable_params:,} / {total_params:,} trainable params ({trainable_params/total_params*100:.1f}%)")
     
     def forward(self, wavs, wav_lens=None):
         """
@@ -124,17 +99,14 @@ class FrameLevelEmotionModel(nn.Module):
         Returns:
             logits: [batch, time_frames, num_classes]
         """
-        # Extract WavLM features
+        # Extract features
         outputs = self.wav2vec2(wavs)
         feats = outputs.last_hidden_state  # [batch, time, feat_dim]
-        
-        # ENHANCED: Normalize features
-        feats = self.feature_norm(feats)
         
         # NO POOLING - keep all time frames
         batch_size, time_steps, feat_dim = feats.shape
         
-        # Frame-level classification
+        # Reshape for classification
         feats_flat = feats.reshape(-1, feat_dim)  # [batch*time, feat_dim]
         logits_flat = self.classifier(feats_flat)  # [batch*time, num_classes]
         
@@ -447,7 +419,7 @@ def train():
     
     # Training loop
     print("\n" + "="*60)
-    print("Starting ENHANCED Frame-Level Training for Emotion Diarization")
+    print("Starting Frame-Level Training for Emotion Diarization")
     print("="*60 + "\n")
     
     for epoch in range(1, CONFIG["number_of_epochs"] + 1):
@@ -545,7 +517,7 @@ def train():
     test_loss /= len(test_loader)
     brain.on_stage_end(sb.Stage.TEST, test_loss)
     
-    print("\n✓ ENHANCED frame-level training and evaluation complete!")
+    print("\n✓ Frame-level training and evaluation complete!")
     print(f"Best validation frame accuracy: {brain.best_acc:.4f}")
 
 
