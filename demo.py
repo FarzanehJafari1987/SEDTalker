@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Emotion-conditioned 3D animation with BETTER SMOOTHING
-Uses temporal filtering on vertices instead of emotion blending
+Emotion-conditioned 3D animation with SMOOTH TRANSITIONS
+Uses linear interpolation at emotion boundaries + temporal vertex filtering
 """
 
 import os
@@ -44,7 +44,7 @@ os.environ.setdefault('PYOPENGL_PLATFORM', 'egl')
 # ============================================================================
 
 DEFAULT_CONFIG = {
-    "wav_path": "SED/wav/mixed_test.wav",
+    "wav_path": "demo/wav/mixed_test.wav",
     "dataset": "EmoVOCA",
     "model_name": "save_512_12_10_22_42/50_model",
     "template_path": "templates.pkl",
@@ -68,6 +68,9 @@ DEFAULT_CONFIG = {
     # CHUNK REDUCTION - Fewer, longer emotion segments
     "min_segment_duration": 0.0,  # Minimum segment length (0=keep all, 2.0=recommended)
     "merge_same_emotions": False, # Merge consecutive same emotions
+    
+    # TRANSITION SMOOTHING - Blend between emotions
+    "transition_duration": 0.5,   # Linear interpolation time at boundaries (seconds)
 }
 
 print("\n" + "="*70)
@@ -469,7 +472,6 @@ def render_video(audio_path, vertices, faces, output_dir):
     print("="*70)
     
     temp_avi = os.path.join(output_dir, "temp.avi")
-
     audio_basename = Path(audio_path).stem
     output_mp4 = os.path.join(output_dir, f"{audio_basename}_video.mp4")
     
@@ -553,6 +555,10 @@ def main():
                        help="Merge consecutive segments with same emotion")
     parser.add_argument("--merge_gap_threshold", type=float, default=0.5,
                        help="Maximum gap for merging same emotions (seconds)")
+    
+    # Transition smoothing
+    parser.add_argument("--transition_duration", type=float, default=DEFAULT_CONFIG["transition_duration"],
+                       help="Duration of linear interpolation at emotion transitions (seconds)")
     
     # Legacy
     parser.add_argument("--emotions", nargs='+', default=["neutral", "happy", "angry", "sad", "upset", "fear", "disgust"])
@@ -658,7 +664,7 @@ def main():
     
     # Emotion conditioning (NO BLENDING - sharp transitions)
     print("\n" + "="*70)
-    print("STEP 5: EMOTION CONDITIONING (SHARP TRANSITIONS)")
+    print("STEP 5: EMOTION CONDITIONING WITH LINEAR INTERPOLATION")
     print("="*70)
     
     cond_vec = torch.zeros_like(vertice_input)
@@ -675,15 +681,19 @@ def main():
             emb = model._condition_features(dummy, emo_id, int_id)
             emotion_embeddings[(emo, intensity)] = emb.squeeze(1)
     
+    # Calculate transition frames
+    transition_frames = int(args.transition_duration * seq_len / duration)
+    print(f"\n⚡ Transition duration: {args.transition_duration}s ({transition_frames} frames)")
+    
     # Apply emotions sharply (no blending) - WITH DETAILED TIMELINE
     intensity_names = {1: "low", 2: "medium", 3: "high"}
     intensity_bars = {1: "▁▁▁▁", 2: "▄▄▄▄", 3: "████"}
     
     print("\n" + "="*70)
-    print("🎭 EMOTION-INTENSITY TIMELINE")
+    print("🎭 EMOTION-INTENSITY TIMELINE (WITH INTERPOLATION)")
     print("="*70)
     
-    for i, seg in enumerate(segments, 1):
+    for i, seg in enumerate(segments):
         emoji = EMOTION_EMOJIS.get(seg["emotion"], "❓")
         seg_duration = seg['end'] - seg['start']
         intensity_bar = intensity_bars.get(seg['intensity'], "▁▁▁▁")
@@ -696,10 +706,41 @@ def main():
             start_frame = int(seg["start"] * seq_len / duration)
             end_frame = int(seg["end"] * seq_len / duration)
             emb = emotion_embeddings[(seg["emotion"], seg["intensity"])]
-            cond_vec[:, start_frame:end_frame, :] = emb
+            
+            # LINEAR INTERPOLATION AT TRANSITIONS
+            if i == 0:
+                # First segment: no interpolation at start
+                cond_vec[:, start_frame:end_frame, :] = emb
+            else:
+                # Linear interpolation from previous emotion
+                prev_seg = segments[i-1]
+                if prev_seg["emotion"] != "neutral":
+                    prev_emb = emotion_embeddings[(prev_seg["emotion"], prev_seg["intensity"])]
+                    
+                    # Transition period: centered on boundary
+                    trans_start = max(start_frame - transition_frames // 2, 0)
+                    trans_end = min(start_frame + transition_frames // 2, end_frame)
+                    trans_len = trans_end - trans_start
+                    
+                    if trans_len > 0:
+                        # Linear interpolation: 0 → 1 (prev → current)
+                        alphas = torch.linspace(0, 1, trans_len, device=args.device).view(1, -1, 1)
+                        interpolated = (1 - alphas) * prev_emb + alphas * emb
+                        cond_vec[:, trans_start:trans_end, :] = interpolated
+                        
+                        # Rest of segment gets full emotion
+                        if trans_end < end_frame:
+                            cond_vec[:, trans_end:end_frame, :] = emb
+                    else:
+                        # No room for transition
+                        cond_vec[:, start_frame:end_frame, :] = emb
+                else:
+                    # Previous was neutral, no interpolation needed
+                    cond_vec[:, start_frame:end_frame, :] = emb
         
+        transition_marker = " 🔀" if i > 0 and seg["emotion"] != "neutral" and segments[i-1]["emotion"] != "neutral" else ""
         print(f"  {i:2d}. {seg['start']:7.3f}s - {seg['end']:7.3f}s ({seg_duration:6.3f}s)  "
-              f"{emoji} {emo_char:8s}  {intensity_bar} {intensity_name:8s}")
+              f"{emoji} {emo_char:8s}  {intensity_bar} {intensity_name:8s}{transition_marker}")
     
     print("="*70)
     
@@ -790,7 +831,7 @@ def main():
     print("-"*70)
     
     vertice_input = vertice_input + cond_vec
-    print("\n✅ Emotion conditioning applied (sharp)")
+    print(f"\n✅ Emotion conditioning applied with {args.transition_duration}s interpolation at transitions")
     
     # Generate
     print("\n" + "="*70)
@@ -823,7 +864,9 @@ def main():
     print("="*70)
     print(f"\n📁 Output: {video_path}")
     if not args.no_smooth:
-        print(f"✨ Temporal smoothing applied (sigma={args.smooth_sigma})")
+        print(f"✨ Smoothing applied:")
+        print(f"   • Transition interpolation: {args.transition_duration}s")
+        print(f"   • Vertex smoothing: sigma={args.smooth_sigma}")
     print("="*70 + "\n")
 
 
