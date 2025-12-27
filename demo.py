@@ -44,7 +44,7 @@ os.environ.setdefault('PYOPENGL_PLATFORM', 'egl')
 # ============================================================================
 
 DEFAULT_CONFIG = {
-    "wav_path": "demo/wav/mixed_test.wav",
+    "wav_path": "demo/wav/test1.wav",
     "dataset": "EmoVOCA",
     "model_name": "save_512_12_10_22_42/50_model",
     "template_path": "templates.pkl",
@@ -64,6 +64,11 @@ DEFAULT_CONFIG = {
     "smooth_vertices": True,      # Apply temporal smoothing
     "smooth_sigma": 1.0,           # Gaussian smoothing strength (0.5-2.0)
     "smooth_window": 5,            # Window size for smoothing
+    
+    # NEUTRAL STABILIZATION - Extra smoothing for neutral segments
+    "stabilize_neutral": True,     # Apply extra smoothing to neutral segments
+    "neutral_sigma": 3.0,          # Gaussian smoothing for neutral (higher = more stable)
+    "neutral_damping": 0.3,        # Motion damping for neutral (0-1, lower = more stable)
     
     # CHUNK REDUCTION - Fewer, longer emotion segments
     "min_segment_duration": 0.0,  # Minimum segment length (0=keep all, 2.0=recommended)
@@ -215,14 +220,21 @@ def load_emotion_segments(emotion_json_path):
         emotion_char = seg.get("emotion", "n")
         emotion_name = EMO_CHAR_TO_NAME.get(emotion_char, "neutral")
         jambatalk_emotion = SED_TO_JAMBATALK.get(emotion_name, "neutral")
-        intensity_str = seg.get("intensity", "mid")
-        intensity_int = INTENSITY_STR_TO_INT.get(intensity_str, 2)
+        
+        # IMPORTANT: Neutral has NO intensity in JambaTalk model
+        if jambatalk_emotion == "neutral":
+            # Ignore intensity for neutral, set to None
+            intensity_int = None
+        else:
+            # Only non-neutral emotions have intensity
+            intensity_str = seg.get("intensity", "mid")
+            intensity_int = INTENSITY_STR_TO_INT.get(intensity_str, 2)
         
         segments.append({
             "start": float(seg.get("start", 0.0)),
             "end": float(seg.get("end", 0.0)),
             "emotion": jambatalk_emotion,
-            "intensity": intensity_int,
+            "intensity": intensity_int,  # None for neutral, 1-3 for others
         })
     
     segments.sort(key=lambda x: x["start"])
@@ -235,7 +247,11 @@ def load_emotion_segments(emotion_json_path):
     print("\n📊 Emotion distribution:")
     for emotion in sorted(emotion_counts.keys()):
         emoji = EMOTION_EMOJIS.get(emotion, "❓")
-        print(f"  {emoji} {emotion:8s}: {emotion_counts[emotion]:3d} segments")
+        count = emotion_counts[emotion]
+        if emotion == "neutral":
+            print(f"  {emoji} {emotion:8s}: {count:3d} segments (no intensity)")
+        else:
+            print(f"  {emoji} {emotion:8s}: {count:3d} segments")
     
     return segments
 
@@ -273,10 +289,14 @@ def merge_consecutive_same_emotions(segments, gap_threshold=0.5):
     for seg in segments[1:]:
         gap = seg['start'] - current['end']
         
-        # Merge if same emotion and small gap
-        if (seg['emotion'] == current['emotion'] and 
-            seg['intensity'] == current['intensity'] and 
-            gap <= gap_threshold):
+        # For neutral, intensity is None, so only check emotion
+        # For non-neutral, check both emotion and intensity
+        same_emotion = (seg['emotion'] == current['emotion'])
+        same_intensity = (seg['emotion'] == 'neutral' or 
+                         (seg['intensity'] == current['intensity']))
+        
+        # Merge if same emotion (and same intensity for non-neutral) and small gap
+        if same_emotion and same_intensity and gap <= gap_threshold:
             # Extend current segment
             current['end'] = seg['end']
         else:
@@ -288,6 +308,57 @@ def merge_consecutive_same_emotions(segments, gap_threshold=0.5):
     merged.append(current)
     
     print(f"  🔀 Merged {original_count} → {len(merged)} segments")
+    
+    return merged
+
+def merge_consecutive_neutral_segments(segments):
+    """
+    Merge ALL consecutive neutral segments into single blocks.
+    Neutral segments next to each other should always be treated as one.
+    
+    Args:
+        segments: List of emotion segments
+    
+    Returns:
+        Segments with consecutive neutrals merged
+    """
+    if not segments:
+        return segments
+    
+    print("\n😐 MERGING CONSECUTIVE NEUTRAL SEGMENTS")
+    print("="*70)
+    
+    original_count = len(segments)
+    neutral_count_before = sum(1 for seg in segments if seg['emotion'] == 'neutral')
+    
+    merged = []
+    current = segments[0].copy()
+    
+    for seg in segments[1:]:
+        # Merge if BOTH are neutral (regardless of gap or any other property)
+        if current['emotion'] == 'neutral' and seg['emotion'] == 'neutral':
+            # Extend current neutral segment
+            current['end'] = seg['end']
+            print(f"  ✓ Merged neutral: {current['start']:.3f}s-{current['end']:.3f}s")
+        else:
+            # Different emotion, save current and start new
+            merged.append(current)
+            current = seg.copy()
+    
+    # Add last segment
+    merged.append(current)
+    
+    neutral_count_after = sum(1 for seg in merged if seg['emotion'] == 'neutral')
+    neutrals_merged = neutral_count_before - neutral_count_after
+    
+    print(f"\n📊 Neutral segments: {neutral_count_before} → {neutral_count_after}")
+    if neutrals_merged > 0:
+        print(f"   ✅ Merged {neutrals_merged} consecutive neutral segments")
+    else:
+        print(f"   ℹ️  No consecutive neutral segments to merge")
+    
+    print(f"📤 Total segments: {original_count} → {len(merged)}")
+    print("="*70)
     
     return merged
 
@@ -416,6 +487,78 @@ def smooth_vertices_savgol(vertices, window=5, order=2):
     print("✅ Savitzky-Golay smoothing applied")
     
     return smoothed
+
+def stabilize_neutral_segments(vertices, segments, duration, neutral_sigma=3.0, damping_factor=0.3):
+    """
+    Apply extra smoothing and damping to neutral segments to reduce noise.
+    Neutral should be stable with minimal motion.
+    
+    Args:
+        vertices: (T, V, 3) array of vertices
+        segments: List of emotion segments
+        duration: Total audio duration
+        neutral_sigma: Gaussian smoothing strength for neutral (higher = more stable)
+        damping_factor: Reduce motion amplitude in neutral segments (0-1, lower = more stable)
+    
+    Returns:
+        Stabilized vertices
+    """
+    print("\n" + "="*70)
+    print("😐 STABILIZING NEUTRAL SEGMENTS")
+    print("="*70)
+    print(f"  📊 Neutral sigma: {neutral_sigma}")
+    print(f"  🎚️  Damping factor: {damping_factor}")
+    
+    T, V, _ = vertices.shape
+    stabilized = np.copy(vertices)
+    
+    # Find neutral segments
+    neutral_frames = []
+    for seg in segments:
+        if seg['emotion'] == 'neutral':
+            start_frame = int(seg['start'] / duration * T)
+            end_frame = int(seg['end'] / duration * T)
+            neutral_frames.append((start_frame, end_frame))
+    
+    if not neutral_frames:
+        print("  ℹ️  No neutral segments found")
+        return stabilized
+    
+    print(f"  🔍 Found {len(neutral_frames)} neutral segments")
+    
+    for start, end in neutral_frames:
+        if end - start < 3:
+            continue
+            
+        # Extract neutral segment
+        neutral_segment = vertices[start:end, :, :]
+        
+        # Apply strong temporal smoothing
+        smoothed_segment = np.copy(neutral_segment)
+        for v in range(V):
+            for c in range(3):
+                smoothed_segment[:, v, c] = gaussian_filter1d(
+                    neutral_segment[:, v, c],
+                    sigma=neutral_sigma,
+                    mode='nearest'
+                )
+        
+        # Apply damping: reduce motion amplitude
+        # Calculate mean position
+        mean_pos = neutral_segment.mean(axis=0, keepdims=True)
+        
+        # Damp motion towards mean
+        damped_segment = mean_pos + (smoothed_segment - mean_pos) * damping_factor
+        
+        # Replace in stabilized array
+        stabilized[start:end, :, :] = damped_segment
+        
+        duration_s = (end - start) / T * duration
+        print(f"    ✓ Stabilized frames {start:4d}-{end:4d} ({duration_s:.2f}s)")
+    
+    print("✅ Neutral segments stabilized")
+    
+    return stabilized
 
 # ============================================================================
 # Rendering (same as before)
@@ -548,6 +691,14 @@ def main():
     parser.add_argument("--smooth_method", default="gaussian", choices=["gaussian", "savgol"],
                        help="Smoothing method")
     
+    # Neutral stabilization options
+    parser.add_argument("--stabilize_neutral", action="store_true", default=DEFAULT_CONFIG["stabilize_neutral"],
+                       help="Apply extra smoothing to neutral segments")
+    parser.add_argument("--neutral_sigma", type=float, default=DEFAULT_CONFIG["neutral_sigma"],
+                       help="Gaussian smoothing strength for neutral segments (2.0-5.0, higher = more stable)")
+    parser.add_argument("--neutral_damping", type=float, default=DEFAULT_CONFIG["neutral_damping"],
+                       help="Motion damping for neutral (0.0-1.0, lower = more stable)")
+    
     # Chunk reduction options
     parser.add_argument("--min_segment_duration", type=float, default=DEFAULT_CONFIG["min_segment_duration"],
                        help="Minimum segment duration in seconds (e.g., 2.0 to remove short segments)")
@@ -619,7 +770,7 @@ def main():
     
     if not segments:
         print("  Using neutral emotion")
-        segments = [{"start": 0.0, "end": duration, "emotion": "neutral", "intensity": 2}]
+        segments = [{"start": 0.0, "end": duration, "emotion": "neutral", "intensity": None}]  # None for neutral
     
     # Load FLAME
     print("\nLoading FLAME template...")
@@ -668,6 +819,7 @@ def main():
     print("="*70)
     
     cond_vec = torch.zeros_like(vertice_input)
+    # Note: zeros = neutral (no conditioning, uses base FLAME template)
     
     # Pre-compute embeddings
     JAMBATALK_EMOTIONS = ["happy", "angry", "sad", "upset", "fear", "disgust"]
@@ -684,6 +836,7 @@ def main():
     # Calculate transition frames
     transition_frames = int(args.transition_duration * seq_len / duration)
     print(f"\n⚡ Transition duration: {args.transition_duration}s ({transition_frames} frames)")
+    print(f"📝 Note: Neutral emotions use base FLAME template (no conditioning)")
     
     # Apply emotions sharply (no blending) - WITH DETAILED TIMELINE
     intensity_names = {1: "low", 2: "medium", 3: "high"}
@@ -696,13 +849,23 @@ def main():
     for i, seg in enumerate(segments):
         emoji = EMOTION_EMOJIS.get(seg["emotion"], "❓")
         seg_duration = seg['end'] - seg['start']
-        intensity_bar = intensity_bars.get(seg['intensity'], "▁▁▁▁")
-        intensity_name = intensity_names.get(seg['intensity'], "low")
         
         # Get first char of emotion for compact display
         emo_char = seg['emotion'][0] if seg['emotion'] else 'n'
         
-        if seg["emotion"] != "neutral":
+        # NEUTRAL: No conditioning applied (uses base FLAME template)
+        if seg["emotion"] == "neutral":
+            # Leave cond_vec as zeros for neutral segments
+            neutral_marker = " 🔵 (base template, no intensity)"
+            print(f"  {i:2d}. {seg['start']:7.3f}s - {seg['end']:7.3f}s ({seg_duration:6.3f}s)  "
+                  f"{emoji} {emo_char:8s}  {neutral_marker}")
+        
+        # NON-NEUTRAL: Apply emotion conditioning
+        elif seg["emotion"] != "neutral":
+            # Now show intensity for non-neutral emotions
+            intensity_bar = intensity_bars.get(seg['intensity'], "▁▁▁▁")
+            intensity_name = intensity_names.get(seg['intensity'], "low")
+            
             start_frame = int(seg["start"] * seq_len / duration)
             end_frame = int(seg["end"] * seq_len / duration)
             emb = emotion_embeddings[(seg["emotion"], seg["intensity"])]
@@ -712,7 +875,7 @@ def main():
                 # First segment: no interpolation at start
                 cond_vec[:, start_frame:end_frame, :] = emb
             else:
-                # Linear interpolation from previous emotion
+                # Linear interpolation from previous emotion (if not neutral)
                 prev_seg = segments[i-1]
                 if prev_seg["emotion"] != "neutral":
                     prev_emb = emotion_embeddings[(prev_seg["emotion"], prev_seg["intensity"])]
@@ -737,10 +900,10 @@ def main():
                 else:
                     # Previous was neutral, no interpolation needed
                     cond_vec[:, start_frame:end_frame, :] = emb
-        
-        transition_marker = " 🔀" if i > 0 and seg["emotion"] != "neutral" and segments[i-1]["emotion"] != "neutral" else ""
-        print(f"  {i:2d}. {seg['start']:7.3f}s - {seg['end']:7.3f}s ({seg_duration:6.3f}s)  "
-              f"{emoji} {emo_char:8s}  {intensity_bar} {intensity_name:8s}{transition_marker}")
+            
+            transition_marker = " 🔀" if i > 0 and segments[i-1]["emotion"] != "neutral" else ""
+            print(f"  {i:2d}. {seg['start']:7.3f}s - {seg['end']:7.3f}s ({seg_duration:6.3f}s)  "
+                  f"{emoji} {emo_char:8s}  {intensity_bar} {intensity_name:8s}{transition_marker}")
     
     print("="*70)
     
@@ -755,7 +918,8 @@ def main():
             emotion_stats[emo] = {'duration': 0, 'count': 0, 'intensities': []}
         emotion_stats[emo]['duration'] += dur
         emotion_stats[emo]['count'] += 1
-        if seg['emotion'] != 'neutral':
+        # Only track intensity for non-neutral emotions (intensity is not None)
+        if seg['emotion'] != 'neutral' and seg['intensity'] is not None:
             emotion_stats[emo]['intensities'].append(seg['intensity'])
     
     total_duration = sum([s['duration'] for s in emotion_stats.values()])
@@ -772,42 +936,53 @@ def main():
         
         print(f"  {emoji} {emo_char:8s}: {dur:6.2f}s ({pct:5.1f}%)  {bar}")
         
+        # Only show intensity stats for non-neutral
         if emotion_stats[emo]['intensities']:
             avg_int = sum(emotion_stats[emo]['intensities']) / len(emotion_stats[emo]['intensities'])
             print(f"           Avg intensity: {avg_int:.3f}  ({count} segments)")
         else:
-            print(f"           ({count} segments)")
+            # Neutral has no intensity
+            if emo == 'neutral':
+                print(f"           ({count} segments, no intensity)")
+            else:
+                print(f"           ({count} segments)")
     
     print("-"*70)
     
     # Intensity distribution  
-    print("\n🔥 INTENSITY DISTRIBUTION:")
+    print("\n🔥 INTENSITY DISTRIBUTION (Non-Neutral Emotions Only):")
     print("-"*70)
     intensity_durations = {1: 0, 2: 0, 3: 0}
     for seg in segments:
-        if seg['emotion'] != 'neutral':
+        # Only include non-neutral emotions with valid intensity (not None)
+        if seg['emotion'] != 'neutral' and seg['intensity'] is not None:
             dur = seg['end'] - seg['start']
             intensity_durations[seg['intensity']] += dur
     
     total_int_dur = sum(intensity_durations.values())
-    int_display = {3: "high  ", 2: "medium", 1: "low   "}
     
-    for intensity in [3, 2, 1]:
-        dur = intensity_durations[intensity]
-        pct = (dur / total_int_dur * 100) if total_int_dur > 0 else 0
-        bar_len = int(pct / 2)
-        bar = "█" * bar_len
-        print(f"  {int_display[intensity]}: {dur:6.2f}s ({pct:5.1f}%)  {bar}")
+    if total_int_dur > 0:
+        int_display = {3: "high  ", 2: "medium", 1: "low   "}
+        
+        for intensity in [3, 2, 1]:
+            dur = intensity_durations[intensity]
+            pct = (dur / total_int_dur * 100) if total_int_dur > 0 else 0
+            bar_len = int(pct / 2)
+            bar = "█" * bar_len
+            print(f"  {int_display[intensity]}: {dur:6.2f}s ({pct:5.1f}%)  {bar}")
+    else:
+        print("  (No non-neutral emotions with intensity)")
     
     print("-"*70)
     
     # Emotion-Intensity matrix
-    print("\n🎭 EMOTION-INTENSITY MATRIX:")
+    print("\n🎭 EMOTION-INTENSITY MATRIX (Non-Neutral Only):")
     print("-"*70)
     
     matrix = {}
     for seg in segments:
-        if seg['emotion'] != 'neutral':
+        # Only include non-neutral emotions with valid intensity (not None)
+        if seg['emotion'] != 'neutral' and seg['intensity'] is not None:
             key = (seg['emotion'], seg['intensity'])
             dur = seg['end'] - seg['start']
             if key not in matrix:
@@ -815,23 +990,28 @@ def main():
             matrix[key]['duration'] += dur
             matrix[key]['count'] += 1
     
-    # Sort by duration
-    sorted_matrix = sorted(matrix.items(), key=lambda x: x[1]['duration'], reverse=True)
-    
-    for (emo, intensity), stats in sorted_matrix:
-        emoji = EMOTION_EMOJIS.get(emo, "❓")
-        emo_char = emo[0] if emo else 'n'
-        dur = stats['duration']
-        pct = (dur / total_duration * 100) if total_duration > 0 else 0
-        count = stats['count']
-        int_name = intensity_names[intensity]
+    if matrix:
+        # Sort by duration
+        sorted_matrix = sorted(matrix.items(), key=lambda x: x[1]['duration'], reverse=True)
         
-        print(f"  {emoji} {emo_char:8s} + {int_name:8s}: {dur:5.2f}s ({pct:5.1f}%)  ({count} segments)")
+        for (emo, intensity), stats in sorted_matrix:
+            emoji = EMOTION_EMOJIS.get(emo, "❓")
+            emo_char = emo[0] if emo else 'n'
+            dur = stats['duration']
+            pct = (dur / total_duration * 100) if total_duration > 0 else 0
+            count = stats['count']
+            int_name = intensity_names[intensity]
+            
+            print(f"  {emoji} {emo_char:8s} + {int_name:8s}: {dur:5.2f}s ({pct:5.1f}%)  ({count} segments)")
+    else:
+        print("  (No non-neutral emotions)")
     
     print("-"*70)
     
     vertice_input = vertice_input + cond_vec
-    print(f"\n✅ Emotion conditioning applied with {args.transition_duration}s interpolation at transitions")
+    print(f"\n✅ Emotion conditioning applied:")
+    print(f"   • Transition interpolation: {args.transition_duration}s")
+    print(f"   • Neutral segments: Use base FLAME template (no conditioning)")
     
     # Generate
     print("\n" + "="*70)
@@ -855,6 +1035,16 @@ def main():
     else:
         print("\n⚠ Vertex smoothing disabled - may have sharp transitions")
     
+    # Apply extra stabilization to neutral segments
+    if args.stabilize_neutral and not args.no_smooth:
+        vertices = stabilize_neutral_segments(
+            vertices, 
+            segments, 
+            duration,
+            neutral_sigma=args.neutral_sigma,
+            damping_factor=args.neutral_damping
+        )
+    
     # Render
     video_path = render_video(args.wav_path, vertices, template_mesh.f, args.output_dir)
     
@@ -867,6 +1057,8 @@ def main():
         print(f"✨ Smoothing applied:")
         print(f"   • Transition interpolation: {args.transition_duration}s")
         print(f"   • Vertex smoothing: sigma={args.smooth_sigma}")
+        if args.stabilize_neutral:
+            print(f"   • Neutral stabilization: sigma={args.neutral_sigma}, damping={args.neutral_damping}")
     print("="*70 + "\n")
 
 
