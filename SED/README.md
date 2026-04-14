@@ -162,7 +162,7 @@ python SED/train_frame_level_7emotions.py
 **Training** (batch_size=4):
 ```bash
 python SED/train_frame_level_7emotions.py \
-    --data_folder data/processed_emotions_7class \
+    --data_folder SED/data/processed_emotions_7class \
     --output_folder results/emotion_7class \
     --epochs 100 \
     --batch_size 4 \
@@ -175,16 +175,16 @@ python SED/train_frame_level_7emotions.py \
 ```bash
 python SED/evaluation/test_preditions.py \
     --checkpoint results/emotion_7class/save/CKPT+epoch_40/model.ckpt \
-    --test-json data/processed_emotions_7class/test_frames.json \
+    --test-json SED/data/processed_emotions_7class/test_frames.json \
     --output evaluation/test_predictions.json \
     --smoothing 5
 ```
 
 **Run Comprehensive Evaluation**:
 ```bash
-python evaluate_sed_comprehensive.py \
+python SED/evaluation/evaluate_sed_comprehensive.py \
     --predictions evaluation/test_predictions.json \
-    --ground_truth data/processed_emotions_7class/test_frames.json \
+    --ground_truth SED/data/processed_emotions_7class/test_frames.json \
     --output_dir evaluation_results/
 ```
 
