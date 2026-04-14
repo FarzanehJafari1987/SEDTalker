@@ -801,5 +801,4 @@ if __name__ == "__main__":
 
 
 # python inference_diarization_7emotions_multiple.py --checkpoint results/emotion_diarization_7class_1/save/CKPT+epoch_50/model.ckpt --audio wav/test.wav --merge-by emotion_and_intensity --smoothing 3 --min-duration 0.2 --max-duration 5.0 --export-json
-
 # python inference_diarization_7emotions_multiple.py --diagnostics
