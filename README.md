@@ -31,7 +31,6 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 - Python 3.8+
 - CUDA-capable GPU (recommended)
 - FFmpeg (for video rendering with audio)
-- Download [JambaTalk](https://github.com/FarzanehJafari1987/JambaTalk) model
 
 ### Environment Setup
 
