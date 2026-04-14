@@ -444,16 +444,16 @@ After completing both steps, you should have:
 
 ```
 data/processed_emotions_7class/
-├── train.json              ✅ 41,181 utterances
-├── valid.json              ✅ 8,822 utterances
-├── test.json               ✅ 8,831 utterances
-├── train_frames.json       ✅ 8.7M frames
-├── valid_frames.json       ✅ 1.9M frames
-├── test_frames.json        ✅ 1.9M frames
-├── emotion_labels.txt      ✅ 7 emotions
-├── class_weights.pt        ✅ Training weights
-├── class_weights.json      ✅ JSON weights
-└── dataset_info.json       ✅ Statistics
+├── train.json              41,181 utterances
+├── valid.json              8,822 utterances
+├── test.json               8,831 utterances
+├── train_frames.json       8.7M frames
+├── valid_frames.json       1.9M frames
+├── test_frames.json        1.9M frames
+├── emotion_labels.txt      7 emotions
+├── class_weights.pt        Training weights
+├── class_weights.json      JSON weights
+└── dataset_info.json       Statistics
 
 Total: 58,834 utterances → 12.45M frames → Ready for training!
 ```
