@@ -1,7 +1,5 @@
 # Data Preparation Pipeline for Speech Emotion Recognition
 
-**Complete guide for preparing emotion datasets for frame-level temporal diarization**
-
 ---
 
 ## Overview
