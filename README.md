@@ -98,29 +98,10 @@ python train.py \
 ```bash
 python test.py \
   --dataset EmoVOCA \
-  --save_path save_512_12_10_22_42 \
+  --save_path save \
   --max_epoch 50 \
   --test_emotion Smile2 \
   --test_intensity 3
-```
-
-### Emotion JSON Format
-
-```json
-{
-  "audio_file": "your_audio.wav",
-  "duration": 41.61,
-  "segments": [
-    {
-      "start": 0.0,
-      "end": 4.52,
-      "emotion": "s",
-      "intensity": "low",
-      "confidence": 0.89
-    },
-    ...
-  ]
-}
 ```
 
 ---
