@@ -364,10 +364,6 @@ def skip(save_json):
     """ Check if preparation already done."""
     return os.path.isfile(save_json)
 
-
-# ====================================================
-# Main entry
-# ====================================================
 if __name__ == "__main__":
     import argparse
     
