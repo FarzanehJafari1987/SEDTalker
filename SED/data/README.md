@@ -33,7 +33,7 @@ pip install torch torchaudio tqdm
 # Verify datasets are downloaded
 ls datasets/IEMOCAP/
 ls datasets/RAVDESS/
-# ... (see DATASETS_COMPLETE_GUIDE.md for download links)
+
 ```
 
 ### Step 1: Prepare Datasets
