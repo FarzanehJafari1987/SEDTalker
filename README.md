@@ -43,9 +43,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 
 1. **Set up the JambaTalk environment:**
 
-   Follow the installation instructions from the official JambaTalk repository:
-   
-   **[JambaTalk GitHub](https://github.com/FarzanehJafari1987/JambaTalk)**
+   Follow the installation instructions from the official JambaTalk repository: **[JambaTalk GitHub](https://github.com/FarzanehJafari1987/JambaTalk)**
 
 2. **Clone this repository:**
 
