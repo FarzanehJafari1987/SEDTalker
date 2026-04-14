@@ -17,7 +17,6 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 - **Speech Emotion Diarization (SED)** - Detects emotions and intensity from audio
 - **JambaTalk** - Hybrid Transformer-Mamba architecture for speech-driven facial animation
 - **Temporal Smoothing** - Natural motion with vertex-level smoothing (not emotion blending!)
-- **Real-time Visualization** - Detailed emotion timeline and statistics
 
 ### Features at a Glance
 
