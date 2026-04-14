@@ -136,7 +136,7 @@ python test.py \
 - **Audio Encoder**: Wav2Vec2 (pre-trained)
 - **Feature Dimension**: 512
 - **Sequence Backbone**: Mamba layers for temporal modeling
-- **Emotion Conditioning**: Learned embeddings (6 emotions × 3 intensities)
+- **Emotion Conditioning**: Learned embeddings (6 emotions × 3 intensities) + Neutral
 - **Output**: 5023 vertices × 3 coordinates (FLAME topology)
 
 ```
