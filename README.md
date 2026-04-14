@@ -9,24 +9,6 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
   <img src="SEDTalker.png" alt="SEDTalker Overview" width="100%">
 </p>
 
-> **Visual Overview**: SEDTalker processes audio through emotion diarization, detecting emotions with varying intensities, then generates smooth, emotion-conditioned 3D facial animations.
-
----
-
-**SEDTalker** is an advanced emotion-conditioned 3D talking head animation system that combines:
-- **Speech Emotion Diarization (SED)** - Detects emotions and intensity from audio
-- **JambaTalk** - Hybrid Transformer-Mamba architecture for speech-driven facial animation
-- **Temporal Smoothing** - Natural motion with vertex-level smoothing (not emotion blending!)
-
-### Features at a Glance
-
-- **7 emotions** with 3 intensity levels each (21 total combinations)
-- **Automatic emotion detection** from speech using SED
-- **Temporal smoothing** for natural motion (Gaussian/Savitzky-Golay)
-- **Chunk reduction** to minimize jittery transitions
-
----
-
 ## Key Features
 
 ### 1. Emotion-Conditioned Animation
