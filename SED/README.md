@@ -194,7 +194,7 @@ python SED/evaluation/evaluate_sed_comprehensive.py \
 
 **Single File**:
 ```bash
-python inference_diarization_7emotions.py \
+python SED/inference_chunked.py\
     --checkpoint results/emotion_7class/save/CKPT+epoch_40/model.ckpt \
     --audio test.wav \
     --smoothing 5
@@ -218,7 +218,7 @@ Emotion Distribution:
 
 **Batch Processing**:
 ```bash
-python inference_diarization_7emotions.py \
+python SED/inference_diarization_7emotions.py \
     --checkpoint results/emotion_7class/save/CKPT+epoch_40/model.ckpt \
     --batch audio_folder/ \
     --smoothing 5 \
