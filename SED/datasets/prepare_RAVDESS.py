@@ -349,10 +349,6 @@ def skip(save_json):
         return False
     return True
 
-
-# -------------------------------------------------
-# Entry point
-# -------------------------------------------------
 if __name__ == "__main__":
     data_folder = "datasets/RAVDESS"
     save_json = os.path.join(data_folder, "RAVDESS.json")
