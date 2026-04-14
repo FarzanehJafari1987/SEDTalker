@@ -16,10 +16,7 @@ from pathlib import Path
 from typing import Dict, List, Union, Tuple
 import json
 
-# ============================================================================
 # Configuration
-# ============================================================================
-
 EMOTION_LABELS = ["angry", "disgust", "fear", "happy", "neutral", "sad", "upset"]
 
 CONFIG = {
@@ -37,10 +34,7 @@ INTENSITY_THRESHOLDS = {
     'high': 1.0,     # 0.75 <= confidence < 1.0
 }
 
-# ============================================================================
 # Model Definition
-# ============================================================================
-
 class FrameLevelEmotionModel(nn.Module):
     def __init__(self, config):
         super().__init__()
@@ -73,11 +67,7 @@ class FrameLevelEmotionModel(nn.Module):
         
         return logits
 
-
-# ============================================================================
 # Diagnostic Functions
-# ============================================================================
-
 def diagnose_predictions(diarizer, audio_path, num_samples=20):
     """Check if model is actually producing varied predictions"""
     waveform = diarizer.preprocess_audio(audio_path)
@@ -92,7 +82,7 @@ def diagnose_predictions(diarizer, audio_path, num_samples=20):
     # Sample evenly across the audio
     indices = np.linspace(0, len(probs)-1, num_samples, dtype=int)
     
-    print("\n🔍 PREDICTION DIAGNOSTICS:")
+    print("\n PREDICTION DIAGNOSTICS:")
     print("="*80)
     for idx in indices:
         frame_probs = probs[idx]
@@ -110,14 +100,14 @@ def diagnose_predictions(diarizer, audio_path, num_samples=20):
     confidences, predictions = torch.max(probs, dim=-1)
     unique_predictions = len(set(predictions.numpy().tolist()))
     
-    print(f"\n📊 DIVERSITY METRICS:")
+    print(f"\n DIVERSITY METRICS:")
     print(f"  Total frames: {len(probs)}")
     print(f"  Unique predictions: {unique_predictions} / 7 emotions")
     print(f"  Average confidence: {confidences.mean():.4f}")
     print(f"  Confidence std: {confidences.std():.4f}")
     
     # Per-emotion statistics
-    print(f"\n📈 PER-EMOTION FRAME COUNTS:")
+    print(f"\n PER-EMOTION FRAME COUNTS:")
     pred_counts = {}
     for pred in predictions.numpy():
         emotion = EMOTION_LABELS[pred]
@@ -131,11 +121,7 @@ def diagnose_predictions(diarizer, audio_path, num_samples=20):
     
     print("="*80)
 
-
-# ============================================================================
 # Intensity Estimation Methods
-# ============================================================================
-
 class IntensityEstimator:
     """Estimate emotion intensity from model predictions"""
     
@@ -219,11 +205,7 @@ class IntensityEstimator:
             
             return label, combined_score, method_scores
 
-
-# ============================================================================
 # Enhanced Emotion Diarizer with Intensity
-# ============================================================================
-
 class EmotionIntensityDiarizer:
     def __init__(
         self, 
@@ -571,11 +553,7 @@ class EmotionIntensityDiarizer:
             'emotion_intensity_matrix': emotion_intensity_matrix
         }
 
-
-# ============================================================================
 # Visualization and Export
-# ============================================================================
-
 def print_segments(result, show_details=True):
     """Pretty print emotion-intensity segments"""
     
@@ -618,11 +596,10 @@ def print_segments(result, show_details=True):
     print(f"\n{'='*80}")
     print_statistics(result['statistics'], result['duration'])
 
-
 def print_statistics(stats, total_duration):
     """Print emotion and intensity statistics"""
     
-    print(f"\n📊 EMOTION DISTRIBUTION:")
+    print(f"\n EMOTION DISTRIBUTION:")
     print("-" * 80)
     for emotion, data in sorted(stats['emotions'].items(), 
                                 key=lambda x: x[1]['duration'], 
@@ -633,7 +610,7 @@ def print_statistics(stats, total_duration):
         print(f"           Avg intensity: {data['avg_intensity']:.3f}  "
               f"({data['count']} segments)")
     
-    print(f"\n🔥 INTENSITY DISTRIBUTION:")
+    print(f"\n INTENSITY DISTRIBUTION:")
     print("-" * 80)
     intensity_order = ['high', 'medium', 'low']
     for intensity in intensity_order:
@@ -643,7 +620,7 @@ def print_statistics(stats, total_duration):
             bar = '█' * int(pct / 2)
             print(f"  {intensity:10s}: {data['duration']:6.2f}s ({pct:5.1f}%)  {bar}")
     
-    print(f"\n🎭 EMOTION-INTENSITY MATRIX:")
+    print(f"\n EMOTION-INTENSITY MATRIX:")
     print("-" * 80)
     for key, data in sorted(stats['emotion_intensity_matrix'].items(),
                            key=lambda x: x[1]['duration'],
@@ -670,11 +647,7 @@ def export_to_label_file(result, output_path):
                    f"{seg['emotion']}\t{seg['intensity']}\n")
     print(f"✓ Exported label file: {output_path}")
 
-
-# ============================================================================
 # Main CLI
-# ============================================================================
-
 def main():
     parser = argparse.ArgumentParser(
         description='Speech Emotion Diarization with Intensity - RUNNABLE VERSION'
