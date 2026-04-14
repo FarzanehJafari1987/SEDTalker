@@ -159,13 +159,7 @@ python SED/train_frame_level_7emotions.py
 
 ### Training
 
-**Optimized for RTX 4090** (batch_size=16, ~30 hours, recommended):
-```bash
-python train_emotion_intensity_optimized.py
-# Automatically uses BFloat16, batch_size=16, TF32, model compilation
-```
-
-**Standard Training** (batch_size=4):
+**Training** (batch_size=4):
 ```bash
 python train_frame_level_7emotions.py \
     --data_folder data/processed_emotions_7class \
