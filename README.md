@@ -1,4 +1,9 @@
 # SEDTalker: Speech-Driven 3D Facial Animation with Emotion Conditioning
+### International Conference on Pattern Recognition (ICPR 2026)
+
+Farzaneh Jafari, Stefano Berretti, Anup Basu
+
+[[Paper]]()|[[Project Page]](https://farzanehjafari1987.github.io/SEDTalker.github.io/)|[[License]](https://github.com/FarzanehJafari1987/SEDTalker/blob/main/LICENSE)
 
 <p align="center">
   <img src="SEDTalker.png" alt="SEDTalker Overview" width="100%">
