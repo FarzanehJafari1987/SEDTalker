@@ -10,27 +10,6 @@ Dataset info:
 - Samples: 480 utterances (120 per speaker)
 - Recording: High-quality studio recordings
 
-IMPORTANT: SAVEE has TWO common directory structures:
-  
-  Structure 1 (Speaker folders):
-    SAVEE/
-      ├── DC/
-      │   ├── a01.wav
-      │   ├── d01.wav
-      │   └── ...
-      ├── JE/
-      ├── JK/
-      └── KL/
-  
-  Structure 2 (Flat with prefix):
-    SAVEE/
-      ├── DC_a01.wav
-      ├── DC_d01.wav
-      ├── JE_a01.wav
-      └── ...
-
-This script handles BOTH structures automatically!
-
 File naming:
 - With folders: a01.wav, d01.wav, n01.wav, etc.
 - Flat structure: DC_a01.wav, JE_d01.wav, KL_n01.wav, etc.
@@ -321,29 +300,6 @@ def create_savee_json(data_folder, save_json):
         
         print(f"  ✓ Processed {total_files} files")
     
-    else:
-        print(f"\nERROR: Cannot detect SAVEE structure!")
-        print(f"\nExpected structures:")
-        print(f"\nOption 1 (Speaker folders):")
-        print(f"  {data_folder}/")
-        print(f"    ├── DC/")
-        print(f"    │   ├── a01.wav")
-        print(f"    │   └── ...")
-        print(f"    ├── JE/")
-        print(f"    ├── JK/")
-        print(f"    └── KL/")
-        print(f"\nOption 2 (Flat with prefix):")
-        print(f"  {data_folder}/")
-        print(f"    ├── DC_a01.wav")
-        print(f"    ├── DC_d01.wav")
-        print(f"    ├── JE_a01.wav")
-        print(f"    └── ...")
-        print()
-        print("Download from:")
-        print("  http://kahlan.eps.surrey.ac.uk/savee/")
-        print("  https://www.kaggle.com/datasets/ejlok1/surrey-audiovisual-expressed-emotion-savee")
-        return {}
-    
     print(f"\n{'='*70}")
     print(f"RESULTS")
     print(f"{'='*70}")
@@ -425,27 +381,6 @@ SAVEE Dataset Information:
   - 120 utterances per speaker (15-20 per emotion)
   - British English
   - High-quality studio recordings
-  
-Directory Structure Options:
-  
-  Option 1 (Speaker folders):
-    datasets/SAVEE/
-      ├── DC/
-      │   ├── a01.wav
-      │   ├── d01.wav
-      │   ├── n01.wav
-      │   └── ...
-      ├── JE/
-      ├── JK/
-      └── KL/
-  
-  Option 2 (Flat with speaker prefix):
-    datasets/SAVEE/
-      ├── DC_a01.wav
-      ├── DC_d01.wav
-      ├── DC_n01.wav
-      ├── JE_a01.wav
-      └── ...
 
 This script automatically detects which structure you have!
 
