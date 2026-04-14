@@ -12,7 +12,6 @@ import librosa
 EMO_NAME_TO_ID = {"happy": 0, "sad": 1, "angry": 2, "upset": 3, "disgust": 4, "fear": 5}
 INTENSITY_TO_ID = {1: 0, 2: 1, 3: 2} 
 
-
 class Dataset(data.Dataset):
     """Custom Dataset with lazy loading and audio caching."""
 
@@ -59,7 +58,6 @@ class Dataset(data.Dataset):
 
     def __len__(self):
         return self.len
-
 
 def read_data(args):
     print("Loading data...")
@@ -170,7 +168,6 @@ def read_data(args):
 
     print('Loaded data: Train-{}, Val-{}, Test-{}'.format(len(train_data), len(valid_data), len(test_data)))
     return train_data, valid_data, test_data, subjects_dict
-
 
 def get_dataloaders(args):
     dataset = {}
