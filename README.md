@@ -12,7 +12,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 ## Key Features
 
 ### 1. Emotion-Conditioned Animation
-- **7 Emotions**: Happy 😊, Sad 😢, Angry 😠, Disgust 🤢, Fear 😨, Upset 😔, Neutral 😐
+- **6 Emotions**: Happy 😊, Sad 😢, Angry 😠, Disgust 🤢, Fear 😨, Upset 😔 + Neutral 😐
 - **3 Intensity Levels**: Low (⚪), Medium (🔵), High (🔴)
 - **18 Unique Combinations**: Each emotion × intensity pair creates distinct expressions
 
