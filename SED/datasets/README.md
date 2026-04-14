@@ -119,16 +119,16 @@
 
 ---
 
-## Citation Information
+## Citation
 
-If you use these datasets in your research, please cite:
+If you use this data preparation pipeline, please cite the original datasets:
 
-- **IEMOCAP**: Busso et al. (2008) IEMOCAP: Interactive emotional dyadic motion capture database
-- **RAVDESS**: Livingstone & Russo (2018) Ryerson Audio-Visual Database of Emotional Speech and Song  
-- **CREMA-D**: Cao et al. (2014) CREMA-D: Crowd-sourced Emotional Multimodal Actors Dataset
-- **TESS**: Dupuis & Pichora-Fuller (2010) Toronto Emotional Speech Set
-- **SAVEE**: Haq & Jackson (2002) Surrey Audio-Visual Expressed Emotion database
-- **ESD**: Zhou et al. (2021) Emotional Speech Dataset
-- **EmoV-DB**: Adigwe et al. (2018) Emotional Voices Database
-- **JL-Corpus**: James & Lech (2014) JL Corpus of emotional speech
-- **MELD**: Poria et al. (2019) MELD: Multimodal EmotionLines Dataset
+- **IEMOCAP**: Busso et al. (2008)
+- **RAVDESS**: Livingstone & Russo (2018)
+- **CREMA-D**: Cao et al. (2014)
+- **TESS**: Dupuis & Pichora-Fuller (2010)
+- **SAVEE**: Haq & Jackson (2002)
+- **ESD**: Zhou et al. (2021)
+- **EmoV-DB**: Adigwe et al. (2018)
+- **JL-Corpus**: James & Lech (2014)
+- **MELD**: Poria et al. (2019)
