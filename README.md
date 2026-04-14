@@ -152,8 +152,8 @@ If you use SEDTalker in your research, please cite:
 
 ## Acknowledgments
 
-- **JambaTalk**: Hybrid Transformer-Mamba architecture for facial animation
-- **EmoVOCA**: Emotional speech dataset
+- [**JambaTalk**](https://github.com/FarzanehJafari1987/JambaTalk): Hybrid Transformer-Mamba architecture for facial animation
+- [**EmoVOCA**](https://arxiv.org/abs/2403.12886): Emotional speech dataset
 
 ---
 
