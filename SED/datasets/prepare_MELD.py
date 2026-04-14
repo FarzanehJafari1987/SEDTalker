@@ -10,20 +10,6 @@ Dataset info:
 - Samples: ~13,000 utterances across 1,433 dialogues
 - Splits: train (~10K), dev (~1K), test (~2.6K)
 
-Dataset structure:
-  MELD/
-    ├── train/
-    │   ├── dia0_utt0.wav
-    │   ├── dia0_utt1.wav
-    │   └── ...
-    ├── dev/
-    │   └── ...
-    ├── test/
-    │   └── ...
-    ├── train_sent_emo.csv
-    ├── dev_sent_emo.csv
-    └── test_sent_emo.csv
-
 Download from: https://affective-meca.github.io/MELD.Sharp/
 """
 
