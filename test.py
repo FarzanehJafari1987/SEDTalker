@@ -106,7 +106,7 @@ def main():
     parser.add_argument("--intensities", type=str, nargs='+', 
                         default=['1', '2', '3'], 
                         help='intensity levels = [1 2 3]') 
-    parser.add_argument("--save_path", type=str, default="save_512_12_10_22_42", help='path of the trained models')
+    parser.add_argument("--save_path", type=str, default="save", help='path of the trained models')
     parser.add_argument("--test_emotion", type=str, default='Afraid', 
                         help='Specific emotion to test (must be in emotions list)')
     parser.add_argument("--test_intensity", type=str, default='2', 
