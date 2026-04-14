@@ -75,13 +75,13 @@ unzip models.zip
 # Expected structure:
 # SEDTalker/
 # ├── EmoVOCA/
-# │   ├── save_512_12_10_22_42/
-# │   │   └── 50_model.pth          # JambaTalk model
+# │   ├── save/
+# │   │   └── 50_model.pth          # JambaTalk model trained on EmoVOCA
 # │   ├── templates.pkl
 # │   └── FLAME_sample.ply
 # └── SED/
 #     └── results/
-#         └── emotion_diarization_7class_1/
+#         └── emotion_diarization_7class/
 #             └── save/CKPT+epoch_50/
 #                 └── model.ckpt    # SED model
 ```
