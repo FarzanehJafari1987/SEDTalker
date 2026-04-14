@@ -1,6 +1,6 @@
 <summary><h2>EmoVOCA</h2></summary>
 
-The [**EmoVOCA**](https://github.com/miccunifi/EmoVOCA/blob/main/README.md) was generated from two datasets for 3D facial data: [**vocaset**](https://voca.is.tue.mpg.de/) and [**Florence 4D Facial Expression Dataset**](https://www.micc.unifi.it/resources/datasets/florence-4d-facial-expression/). Please note that you must obtain authorization to use both datasets.
+The [**EmoVOCA**](https://github.com/miccunifi/EmoVOCA/blob/main/README.md) was generated from two datasets for 3D facial data: [**Vocaset**](https://voca.is.tue.mpg.de/) and [**Florence 4D Facial Expression Dataset**](https://www.micc.unifi.it/resources/datasets/florence-4d-facial-expression/). Please note that you must obtain authorization to use both datasets.
 
 To generate meshes with EmoVOCA, please visit the [**EmoVOCA**](https://github.com/miccunifi/EmoVOCA/blob/main/README.md) GitHub.
 
