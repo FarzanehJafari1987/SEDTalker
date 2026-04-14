@@ -60,9 +60,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 
 ### Download Pre-trained Models
 
-Download the pre-trained JambaTalk and SED models:
-
-**[Download Models from Google Drive](https://drive.google.com/file/d/1tj3CLril0hZy9R_KQPV68NnuIGHo-EF9/view?usp=drive_link)**
+Download the pre-trained [JambaTalk](https://drive.google.com/drive/folders/1LWAjL14QiSdh0RNs_z8L03_oTTQvY-H6) and [SED](https://drive.google.com/drive/folders/1nVlLI1VJ0cFvvA2MEmAUYQa2CN6jnuDw) models.
 
 **Extract and organize:**
 
