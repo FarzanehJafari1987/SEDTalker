@@ -25,15 +25,10 @@ from collections import Counter
 import argparse
 import os
 
-
 EMOTION_LABELS = ["happy", "sad", "angry", "disgust", "fear", "upset", "neutral"]
 EMOTION_TO_IDX = {emo: idx for idx, emo in enumerate(EMOTION_LABELS)}
 
-
-# ============================================================================
 # 1. FRAME-LEVEL METRICS
-# ============================================================================
-
 def compute_frame_metrics(predictions, ground_truth):
     """
     Compute frame-level accuracy, precision, recall, F1
@@ -76,7 +71,6 @@ def compute_frame_metrics(predictions, ground_truth):
         'confusion_matrix_norm': cm_norm
     }
 
-
 def analyze_confusions(cm_norm, threshold=0.1):
     """Find most common emotion confusions"""
     confusions = []
@@ -93,11 +87,7 @@ def analyze_confusions(cm_norm, threshold=0.1):
     confusions.sort(key=lambda x: x['rate'], reverse=True)
     return confusions
 
-
-# ============================================================================
 # 2. SEGMENT-LEVEL METRICS
-# ============================================================================
-
 def extract_segments(frame_labels, frame_rate=50):
     """
     Convert frame-level labels to segments
@@ -138,7 +128,6 @@ def extract_segments(frame_labels, frame_rate=50):
     
     return segments
 
-
 def segment_purity(pred_labels, gt_labels):
     """
     Measure purity of predicted segments
@@ -174,7 +163,6 @@ def segment_purity(pred_labels, gt_labels):
         'num_segments': len(pred_segments)
     }
 
-
 def compute_iou(seg1, seg2):
     """Intersection over Union for temporal segments"""
     start1, end1 = seg1['start'], seg1['end']
@@ -184,7 +172,6 @@ def compute_iou(seg1, seg2):
     union = max(end1, end2) - min(start1, start2)
     
     return intersection / union if union > 0 else 0
-
 
 def segment_f1_score(pred_labels, gt_labels, iou_threshold=0.5):
     """
@@ -229,11 +216,7 @@ def segment_f1_score(pred_labels, gt_labels, iou_threshold=0.5):
         'false_negatives': false_negatives
     }
 
-
-# ============================================================================
 # 3. TEMPORAL CONSISTENCY METRICS
-# ============================================================================
-
 def temporal_jitter(predictions, window=5):
     """
     Measure prediction stability (lower is better)
@@ -252,7 +235,6 @@ def temporal_jitter(predictions, window=5):
     jitter_rate = avg_jitter / (window - 1)
     
     return jitter_rate
-
 
 def segment_duration_stats(predictions):
     """
@@ -280,7 +262,6 @@ def segment_duration_stats(predictions):
         'num_segments': len(segments),
         'very_short_rate': very_short / len(segments)
     }
-
 
 def boundary_detection_metrics(pred_labels, gt_labels, tolerance=0.5):
     """
@@ -317,11 +298,7 @@ def boundary_detection_metrics(pred_labels, gt_labels, tolerance=0.5):
         'num_gt_boundaries': len(gt_boundaries)
     }
 
-
-# ============================================================================
 # 4. VISUALIZATION
-# ============================================================================
-
 def plot_confusion_matrix(cm_norm, save_path):
     """Plot normalized confusion matrix"""
     plt.figure(figsize=(10, 8))
@@ -343,7 +320,6 @@ def plot_confusion_matrix(cm_norm, save_path):
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
     print(f"✓ Saved confusion matrix: {save_path}")
-
 
 def plot_per_class_metrics(metrics, save_path):
     """Plot precision, recall, F1 for each emotion"""
@@ -373,7 +349,6 @@ def plot_per_class_metrics(metrics, save_path):
     plt.savefig(save_path, dpi=300, bbox_inches='tight')
     plt.close()
     print(f"✓ Saved per-class metrics: {save_path}")
-
 
 def plot_emotion_timeline(pred_labels, gt_labels, audio_duration, save_path):
     """
@@ -446,11 +421,7 @@ def plot_emotion_timeline(pred_labels, gt_labels, audio_duration, save_path):
     plt.close()
     print(f"✓ Saved timeline: {save_path}")
 
-
-# ============================================================================
 # 5. MAIN EVALUATION
-# ============================================================================
-
 def evaluate_all(predictions, ground_truth, output_dir):
     """
     Run complete evaluation and generate report
@@ -676,11 +647,6 @@ def evaluate_all(predictions, ground_truth, output_dir):
     
     return results
 
-
-# ============================================================================
-# MAIN
-# ============================================================================
-
 def main():
     parser = argparse.ArgumentParser(description='Comprehensive SED Evaluation')
     parser.add_argument('--predictions', type=str, required=True,
@@ -703,7 +669,6 @@ def main():
     
     # Run evaluation
     results = evaluate_all(predictions, ground_truth, args.output_dir)
-
 
 if __name__ == "__main__":
     main()
