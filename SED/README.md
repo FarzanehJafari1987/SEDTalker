@@ -161,7 +161,7 @@ python SED/train_frame_level_7emotions.py
 
 **Training** (batch_size=4):
 ```bash
-python train_frame_level_7emotions.py \
+python SED/train_frame_level_7emotions.py \
     --data_folder data/processed_emotions_7class \
     --output_folder results/emotion_7class \
     --epochs 100 \
@@ -173,7 +173,7 @@ python train_frame_level_7emotions.py \
 
 **Generate Test Predictions**:
 ```bash
-python test_preditions.py \
+python SED/evaluation/test_preditions.py \
     --checkpoint results/emotion_7class/save/CKPT+epoch_40/model.ckpt \
     --test-json data/processed_emotions_7class/test_frames.json \
     --output evaluation/test_predictions.json \
