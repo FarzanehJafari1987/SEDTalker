@@ -286,13 +286,13 @@ From test set evaluation (1.85M frames):
 ### Diagonal Dominance
 
 Correct classification rates per emotion:
-- Disgust: 91.5% ⭐⭐⭐
-- Neutral: 87.9% ⭐⭐
-- Angry: 82.4% ⭐⭐
-- Happy: 77.3% ⭐
-- Upset: 82.8% ⭐
-- Sad: 73.6% ⭐
-- Fear: 49.6% ⚠️
+- Disgust: 91.5%
+- Neutral: 87.9%
+- Angry: 82.4%
+- Happy: 77.3%
+- Upset: 82.8%
+- Sad: 73.6%
+- Fear: 49.6%
 
 ---
 
@@ -302,15 +302,15 @@ Correct classification rates per emotion:
 
 | Dataset | Samples | Contribution | Emotions | Quality |
 |---------|---------|--------------|----------|---------|
-| **MELD** | 12,070 | 20.5% | 7→7 | ⭐⭐ Conversational |
-| **IEMOCAP** | 11,032 | 18.8% | 10→7 | ⭐⭐⭐ Scripted+Improv |
-| **JL-Corpus** | 10,661 | 18.1% | 3→3 | ⭐⭐ New Zealand English |
-| **ESD** | 10,500 | 17.8% | 5→5 | ⭐⭐⭐ Professional |
-| **CREMA-D** | 7,442 | 12.6% | 6→6 | ⭐⭐⭐ Multi-ethnic |
-| **EmoV-DB** | 6,000 | 5.7% | 5→4 | ⭐⭐ Varied contexts |
-| **TESS** | 2,800 | 4.1% | 7→7 | ⭐⭐⭐ Studio quality |
-| **RAVDESS** | 1,440 | 1.7% | 8→7 | ⭐⭐⭐ Studio quality |
-| **SAVEE** | 480 | 0.8% | 7→7 | ⭐⭐ British English |
+| **MELD** | 12,070 | 20.5% | 7→7 | Conversational |
+| **IEMOCAP** | 11,032 | 18.8% | 10→7 | Scripted+Improv |
+| **JL-Corpus** | 10,661 | 18.1% | 3→3 | New Zealand English |
+| **ESD** | 10,500 | 17.8% | 5→5 | Professional |
+| **CREMA-D** | 7,442 | 12.6% | 6→6 | Multi-ethnic |
+| **EmoV-DB** | 6,000 | 5.7% | 5→4 | Varied contexts |
+| **TESS** | 2,800 | 4.1% | 7→7 | Studio quality |
+| **RAVDESS** | 1,440 | 1.7% | 8→7 | Studio quality |
+| **SAVEE** | 480 | 0.8% | 7→7 | British English |
 
 **Total**: 58,834 utterances → 46,764 valid samples → 12.45M frames (69.2 hours)
 
