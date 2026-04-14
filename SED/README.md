@@ -150,7 +150,7 @@ python data_preparation_7emotions.py
 python prepare_frame_lable.py
 
 # Train model
-python train_emotion_intensity_optimized.py
+python SED/train_frame_level_7emotions.py
 ```
 
 ---
