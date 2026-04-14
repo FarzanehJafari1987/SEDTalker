@@ -23,16 +23,10 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 - Chunk reduction for smoother, longer segments
 
 ### 3. Advanced Smoothing
-- **Vertex-level temporal smoothing** (not emotion blending!)
+- Vertex-level temporal smoothing (not emotion blending!)
 - Preserves pure emotions while creating smooth motion
 - Gaussian or Savitzky-Golay filtering
 - Configurable smoothing strength
-
-### 4. Rich Visualizations
-- Detailed emotion-intensity timeline
-- Distribution charts and bar graphs
-- Emotion-intensity matrix
-- Real-time progress with emojis
 
 ---
 
@@ -46,7 +40,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 | **CPU mode** | `python demo_better_smooth.py --wav_path audio.wav --device cpu` |
 | **No smoothing** | `python demo_better_smooth.py --wav_path audio.wav --no_smooth` |
 | **Training** | `python train.py --dataset EmoVOCA --max_epoch 100` |
-| **Testing** | `python test.py --save_path save_512_12_10_22_42 --max_epoch 50` |
+| **Testing** | `python test.py --save_path save.pth --max_epoch 50` |
 
 ---
 
