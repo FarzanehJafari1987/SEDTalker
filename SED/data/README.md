@@ -473,5 +473,3 @@ If you use this data preparation pipeline, please cite the original datasets:
 - **EmoV-DB**: Adigwe et al. (2018)
 - **JL-Corpus**: James & Lech (2014)
 - **MELD**: Poria et al. (2019)
-
-See the datasts folder `README.md` for full citations.
