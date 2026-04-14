@@ -30,20 +30,6 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 
 ---
 
-## Quick Reference
-
-| Task | Command |
-|------|---------|
-| **Basic usage** | `python demo_better_smooth.py --wav_path audio.wav` |
-| **Reduce chunks** | `python demo_better_smooth.py --wav_path audio.wav --chunk_duration 4.0 --min_segment_duration 2.0` |
-| **Adjust smoothing** | `python demo_better_smooth.py --wav_path audio.wav --smooth_sigma 1.5` |
-| **CPU mode** | `python demo_better_smooth.py --wav_path audio.wav --device cpu` |
-| **No smoothing** | `python demo_better_smooth.py --wav_path audio.wav --no_smooth` |
-| **Training** | `python train.py --dataset EmoVOCA --max_epoch 100` |
-| **Testing** | `python test.py --save_path save.pth --max_epoch 50` |
-
----
-
 ## Quick Start
 
 ### Prerequisites
