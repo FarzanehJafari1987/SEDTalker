@@ -10,7 +10,7 @@ from transformer import TransformerDecoderLayerGQA_RoPE
 
 
 class JambaTalk(nn.Module):
-    """JambaTalk with Emotion & Intensity Conditioning (robust dtype/shape checks + debug)"""
+    """JambaTalk with Emotion & Intensity Conditioning"""
 
     def __init__(self, args, debug: bool = False):
         super(JambaTalk, self).__init__()
@@ -32,7 +32,7 @@ class JambaTalk(nn.Module):
         self.audio_encoder.feature_extractor._freeze_parameters()
 
         # ---------------- EmoVOCA Dataset Configs ----------------
-        pkl_path = "/media/farzaneh/New Volume/2026_projects/__SEDTalker_2026/EmoVOCA/FLAME_masks.pkl"
+        pkl_path = "EmoVOCA/FLAME_masks.pkl"
         with open(pkl_path, "rb") as f:
             self.lip_mask = pickle.load(f, encoding="latin1")["lips"]
 
