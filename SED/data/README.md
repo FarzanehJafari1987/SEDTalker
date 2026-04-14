@@ -1,5 +1,7 @@
 # Data Preparation Pipeline for Speech Emotion Recognition
 
+---
+
 ## Overview
 
 This pipeline converts multiple emotion speech datasets into a unified format for training frame-level emotion diarization systems. The process consists of two main steps:
