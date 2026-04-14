@@ -128,69 +128,12 @@ python test.py \
 
 ---
 
-## Technical Details
-
-### Architecture
-
-**JambaTalk**: Hybrid Transformer-Mamba model
-- **Audio Encoder**: Wav2Vec2 (pre-trained)
-- **Feature Dimension**: 512
-- **Sequence Backbone**: Mamba layers for temporal modeling
-- **Emotion Conditioning**: Learned embeddings (6 emotions × 3 intensities) + Neutral
-- **Output**: 5023 vertices × 3 coordinates (FLAME topology)
-
-```
-Frame 100: Pure Happy 😊  (vertices at position A)
-Frame 101: Pure Happy 😊  (vertices smoothly glide to B)
-Frame 102: Pure Sad 😢    (vertices smoothly glide to C)  
-Frame 103: Pure Sad 😢    (vertices at position D)
-```
-
-**Result**: Clean emotions + smooth motion = natural!
-
-## Pipeline Overview
-
-```
-Input Audio (WAV)
-    ↓
-[1] Speech Emotion Diarization (SED)
-    → Detect emotions & intensity
-    → Chunk audio (2-8s segments)
-    → Generate emotion timeline
-    ↓
-[2] Audio Feature Extraction
-    → Wav2Vec2 encoder
-    → 512-dim features
-    ↓
-[3] Emotion Conditioning
-    → Apply emotion embeddings
-    → Per-segment with intensity
-    → Sharp transitions (no blending!)
-    ↓
-[4] JambaTalk Generation
-    → Mamba sequence modeling
-    → Predict vertex offsets
-    → FLAME topology (5023 vertices)
-    ↓
-[5] Temporal Smoothing
-    → Gaussian filter on vertices
-    → Smooth motion, pure emotions
-    ↓
-[6] Video Rendering
-    → PyRender (800×800 @ 30fps)
-    → FFmpeg audio sync
-    ↓
-Output: Emotion-conditioned 3D talking head video
-```
-
----
-
 ## Citation
 
 If you use SEDTalker in your research, please cite:
 
 ```bibtex
-@article{sedtalker2025,
+@article{sedtalker2025jafari,
   title={SEDTalker: Speech-Driven 3D Facial Animation with Emotion Conditioning},
   author={Farzaneh Jafari, Stefano Berretti, Anup Basu},
   journal={arXiv preprint},
@@ -211,9 +154,7 @@ If you use SEDTalker in your research, please cite:
 ## Acknowledgments
 
 - **JambaTalk**: Hybrid Transformer-Mamba architecture for facial animation
-- **FLAME**: 3D face model topology
 - **EmoVOCA**: Emotional speech dataset
-- **Wav2Vec2**: Pre-trained audio encoder from Hugging Face Transformers
 
 ---
 
