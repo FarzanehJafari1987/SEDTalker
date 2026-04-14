@@ -25,7 +25,7 @@ The system recognizes 7 emotions with hierarchical difficulty:
 ## Performance Summary (Test Set Evaluation)
 
 ### Overall Metrics
-- **Test Accuracy**: **78.92%** ✨ (Exceeds 77.5% target by +1.4%)
+- **Test Accuracy**: **78.92%** (Exceeds 77.5% target by +1.4%)
 - **Weighted F1-Score**: **78.85%**
 - **Macro F1-Score**: **77.49%**
 - **Test Frames Evaluated**: 1,849,663 frames (~10.3 hours of speech)
