@@ -350,7 +350,7 @@ Frame-Level Distribution:
 
 ---
 
-## 🔍 Understanding Frame-Level Conversion
+## Understanding Frame-Level Conversion
 
 ### Why 20ms Frames?
 
