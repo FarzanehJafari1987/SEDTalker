@@ -14,7 +14,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 ### 1. Emotion-Conditioned Animation
 - **6 Emotions**: Happy 😊, Sad 😢, Angry 😠, Disgust 🤢, Fear 😨, Upset 😔 + Neutral 😐
 - **3 Intensity Levels**: Low (⚪), Medium (🔵), High (🔴)
-- **18 Unique Combinations**: Each emotion × intensity pair creates distinct expressions
+- **19 Unique Combinations**: Each emotion × intensity pair creates distinct expressions
 
 ### 2. Speech Emotion Diarization
 - Automatic emotion detection from audio
