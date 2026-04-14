@@ -14,45 +14,45 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 ---
 
 **SEDTalker** is an advanced emotion-conditioned 3D talking head animation system that combines:
-- 🎵 **Speech Emotion Diarization (SED)** - Detects emotions and intensity from audio
-- 🤖 **JambaTalk** - Hybrid Transformer-Mamba architecture for speech-driven facial animation
-- ✨ **Temporal Smoothing** - Natural motion with vertex-level smoothing (not emotion blending!)
-- 📊 **Real-time Visualization** - Detailed emotion timeline and statistics
+- **Speech Emotion Diarization (SED)** - Detects emotions and intensity from audio
+- **JambaTalk** - Hybrid Transformer-Mamba architecture for speech-driven facial animation
+- **Temporal Smoothing** - Natural motion with vertex-level smoothing (not emotion blending!)
+- **Real-time Visualization** - Detailed emotion timeline and statistics
 
-### ✨ Features at a Glance
+### Features at a Glance
 
-- ✅ **7 emotions** with 3 intensity levels each (21 total combinations)
-- ✅ **Automatic emotion detection** from speech using SED
-- ✅ **Temporal smoothing** for natural motion (Gaussian/Savitzky-Golay)
-- ✅ **Chunk reduction** to minimize jittery transitions
-- ✅ **Rich visualizations** with emojis, timelines, and statistics
-- ✅ **Pre-trained models** ready to use
-- ✅ **Easy customization** with command-line arguments
-- ✅ **GPU/CPU support** with automatic fallback
-- ✅ **Professional video output** with synchronized audio
+- **7 emotions** with 3 intensity levels each (21 total combinations)
+- **Automatic emotion detection** from speech using SED
+- **Temporal smoothing** for natural motion (Gaussian/Savitzky-Golay)
+- **Chunk reduction** to minimize jittery transitions
+- **Rich visualizations** with emojis, timelines, and statistics
+- **Pre-trained models** ready to use
+- **Easy customization** with command-line arguments
+- **GPU/CPU support** with automatic fallback
+- **Professional video output** with synchronized audio
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
-### 1. 🎭 Emotion-Conditioned Animation
+### 1. Emotion-Conditioned Animation
 - **7 Emotions**: Happy 😊, Sad 😢, Angry 😠, Disgust 🤢, Fear 😨, Upset 😔, Neutral 😐
 - **3 Intensity Levels**: Low (⚪), Medium (🔵), High (🔴)
 - **18 Unique Combinations**: Each emotion × intensity pair creates distinct expressions
 
-### 2. 🎵 Speech Emotion Diarization
+### 2. Speech Emotion Diarization
 - Automatic emotion detection from audio
 - Temporal segmentation with configurable chunk sizes
 - Intensity estimation (low/medium/high)
 - Chunk reduction for smoother, longer segments
 
-### 3. ✨ Advanced Smoothing
+### 3. Advanced Smoothing
 - **Vertex-level temporal smoothing** (not emotion blending!)
 - Preserves pure emotions while creating smooth motion
 - Gaussian or Savitzky-Golay filtering
 - Configurable smoothing strength
 
-### 4. 📊 Rich Visualizations
+### 4. Rich Visualizations
 - Detailed emotion-intensity timeline
 - Distribution charts and bar graphs
 - Emotion-intensity matrix
@@ -60,7 +60,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 
 ---
 
-## 📋 Quick Reference
+## Quick Reference
 
 | Task | Command |
 |------|---------|
@@ -74,7 +74,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -88,7 +88,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 
    Follow the installation instructions from the official JambaTalk repository:
    
-   👉 **[JambaTalk GitHub](https://github.com/FarzanehJafari1987/JambaTalk)**
+   **[JambaTalk GitHub](https://github.com/FarzanehJafari1987/JambaTalk)**
 
 2. **Clone this repository:**
 
@@ -107,7 +107,7 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 
 Download the pre-trained JambaTalk and SED models:
 
-📦 **[Download Models from Google Drive](https://drive.google.com/file/d/1tj3CLril0hZy9R_KQPV68NnuIGHo-EF9/view?usp=drive_link)**
+**[Download Models from Google Drive](https://drive.google.com/file/d/1tj3CLril0hZy9R_KQPV68NnuIGHo-EF9/view?usp=drive_link)**
 
 **Extract and organize:**
 
@@ -136,9 +136,9 @@ unzip models.zip
 python demo.py --wav_path SED/wav/mixed_test.wav
 
 # Should see:
-# ✅ Audio: SED/wav/mixed_test.wav
-# ✅ FLAME: EmoVOCA/FLAME_sample.ply
-# ✅ Model: EmoVOCA/save_512_12_10_22_42/50_model.pth
+# Audio: SED/wav/mixed_test.wav
+# FLAME: EmoVOCA/FLAME_sample.ply
+# Model: EmoVOCA/save/50_model.pth
 ```
 
 ### Basic Usage
@@ -162,61 +162,60 @@ python demo.py \
 ### Expected Output
 
 ```
-======================================================================
-🎬 EMOTION-CONDITIONED 3D ANIMATION (IMPROVED SMOOTHING)
-======================================================================
 
-🔍 Validating inputs...
-✅ Audio: your_audio.wav
-✅ FLAME: EmoVOCA/FLAME_sample.ply
-✅ Model: EmoVOCA/save_512_12_10_22_42/50_model.pth
+EMOTION-CONDITIONED 3D ANIMATION (IMPROVED SMOOTHING)
+----------------------------------------------------------------------
+Validating inputs...
+Audio: your_audio.wav
+FLAME: EmoVOCA/FLAME_sample.ply
+Model: EmoVOCA/save/50_model.pth
 
+
+STEP 1: EMOTION DIARIZATION
 ======================================================================
-🎵 STEP 1: EMOTION DIARIZATION
-======================================================================
-🔍 Running emotion diarization...
-✅ Generated: demo/output/your_audio_emotions.json
+Running emotion diarization...
+Generated: demo/output/your_audio_emotions.json
 
-✅ Loaded 15 emotion segments
+Loaded 15 emotion segments
 
-📊 Emotion distribution:
+Emotion distribution:
   😊 happy   :   3 segments
   😢 sad     :   2 segments
   😠 angry   :   4 segments
 
-======================================================================
-🎭 EMOTION-INTENSITY TIMELINE
-======================================================================
+
+EMOTION-INTENSITY TIMELINE
+----------------------------------------------------------------------
    1.   0.000s -   4.520s ( 4.520s)  😢 s         ▁▁▁▁ low     
    2.   4.520s -  19.780s (15.260s)  😐 n         ▄▄▄▄ medium  
    3.  19.780s -  34.130s (14.350s)  😊 h         ▄▄▄▄ medium  
    4.  34.130s -  41.610s ( 7.480s)  😊 h         ████ high    
 
-📊 EMOTION DISTRIBUTION:
+EMOTION DISTRIBUTION:
 ----------------------------------------------------------------------
   😐 n       :  15.26s ( 37.1%)  ██████████████████
   😊 h       :  21.83s ( 53.1%)  ██████████████████████████
   😢 s       :   4.52s ( 11.0%)  █████
 
-🔥 INTENSITY DISTRIBUTION:
+INTENSITY DISTRIBUTION:
 ----------------------------------------------------------------------
   high  :   7.48s ( 18.2%)  █████████
   medium:  29.61s ( 72.0%)  ████████████████████████████████████
   low   :   4.52s ( 11.0%)  █████
 
-✨ APPLYING TEMPORAL VERTEX SMOOTHING
+APPLYING TEMPORAL VERTEX SMOOTHING
 ======================================================================
-  🎯 Method: Gaussian filter
-  📊 Sigma: 1.0
-  🪟 Window: 5 frames
-  🔄 Smoothing 5023 vertices across 1230 frames...
-✅ Temporal smoothing applied
+  Method: Gaussian filter
+  Sigma: 1.0
+  Window: 5 frames
+  Smoothing 5023 vertices across 1230 frames...
+Temporal smoothing applied
 
-🎬 STEP 7: RENDER VIDEO
+STEP 7: RENDER VIDEO
 ======================================================================
-✅ Video saved: demo/output/your_audio_video.mp4
+Video saved: demo/output/your_audio_video.mp4
 
-🎉 COMPLETED!
+COMPLETED!
 ```
 
 ---
@@ -287,7 +286,7 @@ python demo_better_smooth.py --wav_path audio.wav --no_smooth
 
 ---
 
-## 🎯 Content-Specific Recommendations
+## Content-Specific Recommendations
 
 ### Fast Dialogue/Conversation
 ```bash
@@ -298,7 +297,7 @@ python demo.py \
   --smooth_sigma 0.8
 ```
 
-### Normal Speech/Presentation ⭐ Recommended
+### Normal Speech/Presentation (Recommended)
 ```bash
 python demo.py \
   --wav_path presentation.wav \
@@ -328,7 +327,7 @@ python demo.py \
 
 ---
 
-## 🏋️ Training Your Own Model
+## Training Your Own Model
 
 ### Training
 
@@ -361,7 +360,7 @@ python test.py \
 
 ---
 
-## 📊 Output Structure
+## Output Structure
 
 ```
 demo/output/
@@ -393,7 +392,7 @@ demo/output/
 
 ---
 
-## 🎨 Emotion System
+## Emotion System
 
 ### Emotion Mappings
 
@@ -415,7 +414,7 @@ demo/output/
 
 ---
 
-## 🔧 Technical Details
+## Technical Details
 
 ### Architecture
 
@@ -426,13 +425,13 @@ demo/output/
 - **Emotion Conditioning**: Learned embeddings (6 emotions × 3 intensities)
 - **Output**: 5023 vertices × 3 coordinates (FLAME topology)
 
-### Smoothing: The Right Way ✅
+### Smoothing: The Right Way
 
 **We do NOT blend emotions** (that creates weird morphed faces!)
 
 **Instead:**
-1. ✅ Apply emotions **sharply** (pure expressions)
-2. ✅ Smooth **vertex motion** over time (Gaussian filter)
+1. Apply emotions **sharply** (pure expressions)
+2. Smooth **vertex motion** over time (Gaussian filter)
 
 ```
 Frame 100: Pure Happy 😊  (vertices at position A)
@@ -445,7 +444,7 @@ Frame 103: Pure Sad 😢    (vertices at position D)
 
 ---
 
-## 📈 Performance
+## Performance
 
 - **Throughput**: 600-800 FPS (generation)
 - **Real-time Factor**: ~20x (on RTX 3090)
@@ -454,7 +453,7 @@ Frame 103: Pure Sad 😢    (vertices at position D)
 
 ---
 
-## 🎯 Pipeline Overview
+## Pipeline Overview
 
 ```
 Input Audio (WAV)
@@ -478,7 +477,7 @@ Input Audio (WAV)
     → Predict vertex offsets
     → FLAME topology (5023 vertices)
     ↓
-[5] Temporal Smoothing ✨
+[5] Temporal Smoothing
     → Gaussian filter on vertices
     → Smooth motion, pure emotions
     ↓
@@ -491,7 +490,7 @@ Output: Emotion-conditioned 3D talking head video
 
 ---
 
-## 📝 Citation
+## Citation
 
 If you use SEDTalker in your research, please cite:
 
@@ -502,11 +501,19 @@ If you use SEDTalker in your research, please cite:
   journal={arXiv preprint},
   year={2026}
 }
+
+@misc{jambatalk2026jafari,
+ title={JambaTalk: Speech-driven 3D Talking Head Generation based on a Hybrid Transformer-Mamba Model},
+ author={Farzaneh Jafari, Stefano Berretti, Anup Basu},
+ note={Transactions on Multimedia Computing, Communications, and Applications},
+ doi={10.1145/3793196},
+ year={2026}
+}
 ```
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - **[JambaTalk](https://github.com/FarzanehJafari1987/JambaTalk)**: Hybrid Transformer-Mamba architecture for facial animation
 - **[Pre-trained Models](https://drive.google.com/file/d/1tj3CLril0hZy9R_KQPV68NnuIGHo-EF9/view?usp=drive_link)**: JambaTalk and SED emotion diarization models
