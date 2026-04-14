@@ -24,11 +24,6 @@ Farzaneh Jafari, Stefano Berretti, Anup Basu
 - **Automatic emotion detection** from speech using SED
 - **Temporal smoothing** for natural motion (Gaussian/Savitzky-Golay)
 - **Chunk reduction** to minimize jittery transitions
-- **Rich visualizations** with emojis, timelines, and statistics
-- **Pre-trained models** ready to use
-- **Easy customization** with command-line arguments
-- **GPU/CPU support** with automatic fallback
-- **Professional video output** with synchronized audio
 
 ---
 
