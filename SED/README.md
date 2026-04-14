@@ -17,7 +17,7 @@ The system recognizes 7 emotions with hierarchical difficulty:
 - **Angry** - High arousal, negative valence
 - **Disgust** - Moderate arousal, negative valence
 - **Fear** - High arousal, negative valence
-- **Upset** - Moderate arousal, negative valence (IEMOCAP-specific)
+- **Upset** - Moderate arousal, negative valence
 - **Neutral** - Low arousal, neutral valence (baseline state)
 
 ---
