@@ -3,7 +3,7 @@
 
 Farzaneh Jafari, Stefano Berretti, Anup Basu
 
-[[Paper]]()|[[Project Page]](https://farzanehjafari1987.github.io/SEDTalker.github.io/)|[[License]](https://github.com/FarzanehJafari1987/SEDTalker/blob/main/LICENSE)
+[[Paper]](https://arxiv.org/abs/2604.13335)|[[Project Page]](https://farzanehjafari1987.github.io/SEDTalker.github.io/)|[[License]](https://github.com/FarzanehJafari1987/SEDTalker/blob/main/LICENSE)
 
 <p align="center">
   <img src="SEDTalker.png" alt="SEDTalker Overview" width="100%">
